@@ -25,8 +25,8 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-#      - name: Install dependencies
-#        run: vcpkg install zlib libiconv expat --triplet=x64-windows
+      - name: Install dependencies
+        run: vcpkg install zlib libiconv expat --triplet=x64-windows
 
       - name: Fetch Exiv2 source
         uses: actions/download-artifact@v2
@@ -39,23 +39,15 @@ jobs:
         run: tar xf exiv2-0.27.4-Source.tar.gz
 
       - name: Make directories
-        shell: bash
         working-directory: ./exiv2-0.27.4-Source
         run: |
           mkdir build
           mkdir local_install
-          echo -e "[build_requires]\n[settings]\narch=x86_64\nbuild_type=Release\ncompiler=Visual Studio\ncompiler.runtime=MD\ncompiler.version=16\nos=Windows\narch_build=x86_64\nos_build=Windows\n[options]\n[env]\n" >msvc2019Release64
-
-      - name: Install dependencies
-        working-directory: ./exiv2-0.27.4-Source/build
-        run: |
-          pip install conan
-          conan install .. --build missing --profile ../msvc2019Release64
 
       - name: Configure build
         working-directory: ./exiv2-0.27.4-Source/build
-#        env:
-#          CMAKE_TOOLCHAIN_FILE: C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        env:
+          CMAKE_TOOLCHAIN_FILE: C:/vcpkg/scripts/buildsystems/vcpkg.cmake
         run: cmake .. -DCMAKE_BUILD_TYPE=Release \
                 -DCMAKE_INSTALL_PREFIX=../local_install \
                 -DEXIV2_ENABLE_WIN_UNICODE=ON \
@@ -66,7 +58,7 @@ jobs:
 
       - name: Compile Exiv2
         working-directory: ./exiv2-0.27.4-Source/build
-        run: cmake --build . --config Release
+        run: cmake --build . --config Release --verbose
 
       - name: Store results
         uses: actions/upload-artifact@v2
