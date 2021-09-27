@@ -28,7 +28,7 @@ jobs:
             make &&
             make install &&
             cd .. &&
-            python developer/build_doc.py 2.5.27 &
+            python developer/build_doc.py 2.5.27 &&
             python developer/build_swig.py system
 
       - name: Store results
