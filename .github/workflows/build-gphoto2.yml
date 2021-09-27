@@ -1,0 +1,38 @@
+name: Test build libgphoto2
+on: workflow_dispatch
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          repository: jim-easterbrook/python-gphoto2
+
+      - name: Download libgphoto2
+        run: wget -nv https://github.com/gphoto/gphoto2/releases/download/v2.5.27/gphoto2-2.5.27.tar.xz
+
+      - name: Extract libgphoto2
+        run: tar xf gphoto2-2.5.27.tar.xz
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.1.1
+        env:
+          CIBW_ARCHS: auto64
+          CIBW_BUILD: cp36-manylinux_x86_64
+          CIBW_SKIP: pp37-manylinux_x86_64
+          CIBW_BEFORE_ALL: >
+            cd gphoto2-2.5.27 &&
+            ./configure --enable-vusb &&
+            make &&
+            make install &&
+            cd .. &&
+            python utils/build_doc.py 2.5.27 &
+            python utils/build_swig.py system
+
+      - name: Store results
+        uses: actions/upload-artifact@v2
+        with:
+          name: manylinux-wheel
+          path: wheelhouse/*.whl
