@@ -32,7 +32,7 @@ jobs:
             yum install -y libusb-devel libusbx-devel libcurl-devel libxml2-devel \
               libexif-devel libjpeg-turbo-devel doxygen &&
             cd libgphoto2-2.5.27 &&
-            ./configure --enable-vusb &&
+            ./configure --enable-vusb --disable-rpath &&
             make &&
             make install &&
             cd .. &&
