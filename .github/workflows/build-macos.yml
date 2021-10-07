@@ -33,7 +33,6 @@ jobs:
             conan profile new --detect default &&
             conan profile show default &&
             conan install .. --build missing &&
-            rm Find* &&
             cmake .. -DCMAKE_BUILD_TYPE=Release \
               -DCMAKE_INSTALL_PREFIX=/project/exiv2-install \
               -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations" \
