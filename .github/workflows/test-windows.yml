@@ -1,0 +1,22 @@
+name: Test Windows wheels
+on: workflow_dispatch
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2016, windows-2019]
+        python-version: ['3.8']
+#        python-version: ['3.5', '3.6', '3.7', '3.8', '3.9']
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+
+      - name: Install wheel
+        run: pip3 install python-gexiv2
+
+      - name: Test installation
+        run: python3 -c "import exiv2; print(exiv2.__version__, exiv2.versionString())"
