@@ -14,6 +14,7 @@ jobs:
         run: |
           wget -nv https://www.exiv2.org/builds/exiv2-0.27.4-Source.tar.gz
           tar xf exiv2-0.27.4-Source.tar.gz
+          cp conanfile.py exiv2-0.27.4-Source/
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.1.1
@@ -24,7 +25,7 @@ jobs:
           CIBW_BEFORE_ALL: >
             brew install ninja &&
             pip3 install wheel &&
-            pip3 install conan==1.39.0 &&
+            pip3 install conan &&
             cd exiv2-0.27.4-Source &&
             mkdir build &&
             cd build &&
