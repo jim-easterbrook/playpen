@@ -35,7 +35,6 @@ jobs:
             cd exiv2-0.27.4-Source/build &&
             conan config install https://github.com/conan-io/conanclientcert.git &&
             conan profile new --detect default &&
-            conan profile show default &&
             conan install .. --build missing &&
             cmake .. -DCMAKE_BUILD_TYPE=Release \
               -DCMAKE_INSTALL_PREFIX=../local_install \
@@ -47,7 +46,7 @@ jobs:
             cmake --build . --config Release &&
             cmake --build . --target install &&
             cd ../.. &&
-            python3 utils/copy_libexiv2.py exiv2-0.27.4-Source/local-install 0.27.4 &&
+            python3 utils/copy_libexiv2.py exiv2-0.27.4-Source/local_install 0.27.4 &&
             python3 utils/build_swig.py 0.27.4
 
       - name: Store results
