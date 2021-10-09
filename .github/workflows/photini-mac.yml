@@ -6,7 +6,9 @@ jobs:
     runs-on: macos-10.15
     steps:
       - name: Install
-        run: pip3 install PySide2 python-exiv2 photini pyenchant gpxpy
+        run: |
+          brew install enchant
+          pip3 install PySide2 python-exiv2 photini pyenchant gpxpy
 
       - name: Test
         run: python3 -m photini.editor -t -v --version
