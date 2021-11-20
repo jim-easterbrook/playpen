@@ -36,8 +36,8 @@ jobs:
             make &&
             make install &&
             cd .. &&
-            python developer/build_doc.py 2.5.27 &&
-            python developer/build_swig.py 2.5.27
+            python3 developer/build_doc.py 2.5.27 &&
+            python3 developer/build_swig.py 2.5.27
 
       - name: Store results
         uses: actions/upload-artifact@v2
