@@ -29,8 +29,7 @@ jobs:
           CIBW_SKIP: pp37-macosx_x86_64
           CIBW_ENVIRONMENT: GPHOTO2_VERSION=2.5.27
           CIBW_BEFORE_ALL: >
-            brew install libexif jpeg-turbo &&
-            brew install --cask doxygen &&
+            brew install libexif jpeg-turbo doxygen &&
             cd libgphoto2-2.5.27 &&
             ./configure --prefix=$PWD/local_install --disable-internal-docs \
                 CFLAGS="-D_DARWIN_C_SOURCE" &&
