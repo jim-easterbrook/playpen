@@ -29,6 +29,7 @@ jobs:
           CIBW_SKIP: pp3?-*
           CIBW_BEFORE_ALL: >
             brew install ninja &&
+            rm /usr/local/lib/libgettextlib.dylib /usr/local/lib/libintl.dylib /usr/local/include/libintl.h &&
             pip3 install conan==1.54.0 &&
             cd exiv2-0.27.6-Source/build &&
             conan profile new --detect default &&
