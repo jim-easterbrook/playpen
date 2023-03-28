@@ -32,7 +32,7 @@ jobs:
             pip3 install conan==1.54.0 &&
             cd exiv2-0.27.6-Source/build &&
             conan profile new --detect default &&
-            conan install .. libgettext/0.21 -pr:b=default -s arch=armv8 &&
+            conan install libgettext/0.21 -b missing -pr:b=default -s arch=armv8 &&
             conan install .. -o unitTests=False -b missing -pr:b=default -s arch=armv8 &&
             cmake .. -DCMAKE_BUILD_TYPE=Release \
               -DCMAKE_INSTALL_PREFIX=${{ env.EXIV2_ROOT }} \
