@@ -1,9 +1,9 @@
-name: Build Exiv2 manylinux wheel
+name: Build exiv2 manylinux wheel
 on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       EXIV2_ROOT: /project/exiv2-install
     steps:
@@ -17,18 +17,18 @@ jobs:
           wget -nv https://github.com/Exiv2/exiv2/releases/download/v0.27.6/exiv2-0.27.6-Source.tar.gz
           tar xf exiv2-0.27.6-Source.tar.gz
 
-      - name: Install dependencies
-        run: sudo apt-get install -y zlib1g-dev libexpat1-dev gettext
-
-      - name: Make directories
-        working-directory: ./exiv2-0.27.6-Source
-        run: |
-          mkdir build
-          mkdir local_install
-
-      - name: Build libexiv2
-        working-directory: ./exiv2-0.27.6-Source/build
-        run: |
+      - name: Build wheel
+        uses: pypa/cibuildwheel@v2.12.1
+        env:
+          CIBW_ARCHS: auto64
+          CIBW_ENVIRONMENT: PIP_BUILD_OPTION="--py-limited-api=cp36"
+          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_ROOT
+          CIBW_BUILD: cp36-manylinux_x86_64
+          CIBW_BEFORE_ALL: >
+            yum install -y zlib-devel expat-devel gettext-devel &&
+            cd exiv2-0.27.6-Source &&
+            mkdir build &&
+            cd build &&
             cmake .. -DCMAKE_BUILD_TYPE=Release \
               -DCMAKE_INSTALL_PREFIX=${{ env.EXIV2_ROOT }} \
               -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations" \
@@ -37,20 +37,11 @@ jobs:
               -DEXIV2_ENABLE_BMFF=ON \
               -DEXIV2_ENABLE_NLS=ON \
               -DEXIV2_ENABLE_VIDEO=ON \
-              -DCMAKE_CXX_STANDARD=98
-            cmake --build .
-            sudo cmake --install .
-
-      - name: Run SWIG
-        run: python utils/build_swig.py ${{ env.EXIV2_ROOT }}/include
-
-      - name: Build wheel
-        uses: pypa/cibuildwheel@v2.11.2
-        env:
-          CIBW_ARCHS: auto64
-          CIBW_CONFIG_SETTINGS: "--build-option --py-limited-api=cp36"
-          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_ROOT
-          CIBW_BUILD: cp36-manylinux_x86_64
+              -DCMAKE_CXX_STANDARD=98 &&
+            cmake --build . &&
+            cmake --install . &&
+            cd ../.. &&
+            python utils/build_swig.py ${{ env.EXIV2_ROOT }}/include
 
       - name: Store results
         uses: actions/upload-artifact@v3
