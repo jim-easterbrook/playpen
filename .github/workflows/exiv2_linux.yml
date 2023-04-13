@@ -39,7 +39,7 @@ jobs:
               -DEXIV2_ENABLE_VIDEO=ON \
               -DCMAKE_CXX_STANDARD=98
             cmake --build .
-            cmake --install .
+            sudo cmake --install .
 
       - name: Run SWIG
         run: python utils/build_swig.py ${{ env.EXIV2_ROOT }}l/include
@@ -48,6 +48,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.11.2
         env:
           CIBW_ARCHS: auto64
+          CIBW_CONFIG_SETTINGS: "--build-option --py-limited-api=cp36"
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_ROOT
           CIBW_BUILD: cp36-manylinux_x86_64
 
