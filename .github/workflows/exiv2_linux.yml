@@ -42,7 +42,7 @@ jobs:
             sudo cmake --install .
 
       - name: Run SWIG
-        run: python utils/build_swig.py ${{ env.EXIV2_ROOT }}l/include
+        run: python utils/build_swig.py ${{ env.EXIV2_ROOT }}/include
 
       - name: Build wheel
         uses: pypa/cibuildwheel@v2.11.2
