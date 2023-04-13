@@ -18,7 +18,7 @@ jobs:
           tar xf exiv2-0.27.6-Source.tar.gz
 
       - name: Install dependencies
-        run: apt-get install -y zlib-devel expat-devel gettext-devel
+        run: sudo apt-get install -y zlib-devel expat-devel gettext-devel
 
       - name: Make directories
         working-directory: ./exiv2-0.27.6-Source
