@@ -28,7 +28,7 @@ jobs:
           CIBW_SKIP: pp3?-*
           CIBW_ENVIRONMENT: GPHOTO2_ROOT=$PWD/libgphoto2/local_install
           CIBW_BEFORE_ALL: >
-            brew install libexif jpeg-turbo libtool &&
+            brew install libexif jpeg-turbo libtool --universal &&
             pushd $PWD/libgphoto2 &&
             ./configure --prefix=$PWD/local_install --disable-internal-docs \
                 --host=aarch64-apple-darwin \
