@@ -7,6 +7,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+        with:
+          repository: jim-easterbrook/python-gphoto2
 
       - name: Download libgphoto2
         run: wget -nv
