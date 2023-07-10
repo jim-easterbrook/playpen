@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
     env:
       GPHOTO2_SRC: ${{ github.workspace }}/libgphoto2
     steps:
@@ -25,8 +25,8 @@ jobs:
         working-directory: ${{ env.GPHOTO2_SRC }}
         run: |
           brew update
-          brew install libexif
-          brew install jpeg-turbo libtool
+          brew install libexif jpeg-turbo libtool
+          brew link --force --overwrite libtool
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
               --host=aarch64-apple-darwin \
               CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos"
