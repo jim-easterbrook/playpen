@@ -4,6 +4,8 @@ on: workflow_dispatch
 jobs:
   build:
     runs-on: macos-latest
+    env:
+      GPHOTO2_SRC: $HOME/libgphoto2
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -17,25 +19,26 @@ jobs:
 
       - name: Extract libgphoto2
         run: |
-          mkdir $PWD/libgphoto2
+          mkdir $GPHOTO2_SRC
           tar xf libgphoto2.tar.xz \
-            --directory $PWD/libgphoto2 --strip-components=1
+            --directory $GPHOTO2_SRC --strip-components=1
+
+      - name: Build libgphoto2
+        working-directory: $GPHOTO2_SRC
+        run: |
+          brew install libexif jpeg-turbo libtool
+          ./configure --prefix=$PWD/local_install --disable-internal-docs \
+              --host=aarch64-apple-darwin \
+              CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos"
+          make
+          make install
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.12.3
         env:
           CIBW_ARCHS: arm64
           CIBW_SKIP: pp3?-*
-          CIBW_ENVIRONMENT: GPHOTO2_ROOT=$PWD/libgphoto2/local_install
-          CIBW_BEFORE_ALL: >
-            brew install libexif jpeg-turbo libtool --universal &&
-            pushd $PWD/libgphoto2 &&
-            ./configure --prefix=$PWD/local_install --disable-internal-docs \
-                --host=aarch64-apple-darwin \
-                CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos" &&
-            make &&
-            make install &&
-            popd
+          CIBW_ENVIRONMENT: GPHOTO2_ROOT=$GPHOTO2_SRC/local_install
 
       - name: Store results
         uses: actions/upload-artifact@v3
