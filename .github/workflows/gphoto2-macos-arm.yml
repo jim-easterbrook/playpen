@@ -5,7 +5,7 @@ jobs:
   build:
     runs-on: macos-latest
     env:
-      GPHOTO2_SRC: $HOME/libgphoto2
+      GPHOTO2_SRC: ${{ github.workspace }}/libgphoto2
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -26,7 +26,8 @@ jobs:
       - name: Build libgphoto2
         working-directory: $GPHOTO2_SRC
         run: |
-          brew install libexif jpeg-turbo libtool
+          brew update
+          brew install --bottle-tag=arm64_big_sur libexif jpeg-turbo libtool
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
               --host=aarch64-apple-darwin \
               CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos"
