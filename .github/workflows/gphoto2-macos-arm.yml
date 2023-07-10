@@ -25,7 +25,8 @@ jobs:
         working-directory: ${{ env.GPHOTO2_SRC }}
         run: |
           brew update
-          brew install libexif jpeg-turbo libtool
+          brew install libexif
+          brew reinstall jpeg-turbo libtool
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
               --host=aarch64-apple-darwin \
               CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos"
