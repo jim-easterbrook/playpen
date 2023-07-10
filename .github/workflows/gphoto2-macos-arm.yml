@@ -24,7 +24,7 @@ jobs:
             --directory $GPHOTO2_SRC --strip-components=1
 
       - name: Build libgphoto2
-        working-directory: $GPHOTO2_SRC
+        working-directory: ${{ env.GPHOTO2_SRC }}
         run: |
           brew update
           brew install --bottle-tag=arm64_big_sur libexif jpeg-turbo libtool
@@ -39,7 +39,7 @@ jobs:
         env:
           CIBW_ARCHS: arm64
           CIBW_SKIP: pp3?-*
-          CIBW_ENVIRONMENT: GPHOTO2_ROOT=$GPHOTO2_SRC/local_install
+          CIBW_ENVIRONMENT: GPHOTO2_ROOT=${{ env.GPHOTO2_SRC }}/local_install
 
       - name: Store results
         uses: actions/upload-artifact@v3
