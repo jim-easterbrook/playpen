@@ -26,7 +26,8 @@ jobs:
         run: |
           brew update
           brew install libexif jpeg-turbo libtool
-          brew link --force --overwrite libtool
+          brew unlink libtool
+          brew link libtool
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
               --host=aarch64-apple-darwin \
               CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos"
