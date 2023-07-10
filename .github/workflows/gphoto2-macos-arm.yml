@@ -27,7 +27,6 @@ jobs:
         working-directory: ${{ env.GPHOTO2_SRC }}
         run: |
           brew update
-          brew upgrade
           brew install --bottle-arch=arm64_monterey libexif jpeg-turbo libtool
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
               --host=aarch64-apple-darwin \
