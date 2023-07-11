@@ -33,8 +33,7 @@ jobs:
           done
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
               --host=aarch64-apple-darwin \
-              --cc='clang -arch arm64' \
-              CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos"
+              CFLAGS="-D_DARWIN_C_SOURCE -arch arm64 -target arm64-apple-macos"
           make
           make install
 
