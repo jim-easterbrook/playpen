@@ -25,7 +25,7 @@ jobs:
         working-directory: ${{ env.GPHOTO2_SRC }}
         run: |
           brew install libexif
-          brew uninstall libtool
+          brew uninstall --ignore-dependencies libtool
           brew fetch --force --bottle-tag=arm64_monterey libtool
           brew install $(brew --cache --bottle-tag=arm64_monterey libtool)
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
