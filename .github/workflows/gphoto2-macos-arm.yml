@@ -27,7 +27,7 @@ jobs:
           PACKAGES=(libexif libtool)
           for PACKAGE in "${PACKAGES[@]}"
           do
-            brew uninstall --ignore-dependencies $PACKAGE
+            brew uninstall --force --ignore-dependencies $PACKAGE
             brew fetch --force --bottle-tag=arm64_monterey $PACKAGE
             brew install $(brew --cache --bottle-tag=arm64_monterey $PACKAGE)
           done
