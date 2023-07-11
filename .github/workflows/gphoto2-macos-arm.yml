@@ -24,8 +24,8 @@ jobs:
       - name: Build libgphoto2
         working-directory: ${{ env.GPHOTO2_SRC }}
         run: |
-          brew update
-          brew install libexif jpeg-turbo
+          brew install libexif
+          brew uninstall libtool
           brew fetch --force --bottle-tag=arm64_monterey libtool
           brew install $(brew --cache --bottle-tag=arm64_monterey libtool)
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
