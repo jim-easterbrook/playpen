@@ -24,12 +24,16 @@ jobs:
       - name: Build libgphoto2
         working-directory: ${{ env.GPHOTO2_SRC }}
         run: |
-          brew install libexif
-          brew uninstall --ignore-dependencies libtool
-          brew fetch --force --bottle-tag=arm64_monterey libtool
-          brew install $(brew --cache --bottle-tag=arm64_monterey libtool)
+          PACKAGES=(libexif libtool)
+          for PACKAGE in "${PACKAGES[@]}"
+          do
+            brew uninstall --ignore-dependencies $PACKAGE
+            brew fetch --force --bottle-tag=arm64_monterey $PACKAGE
+            brew install $(brew --cache --bottle-tag=arm64_monterey $PACKAGE)
+          done
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
               --host=aarch64-apple-darwin \
+              --cc='clang -arch arm64' \
               CFLAGS="-D_DARWIN_C_SOURCE -target arm64-apple-macos"
           make
           make install
