@@ -1,0 +1,118 @@
+name: Build python-exiv2 for Windows
+on: workflow_dispatch
+
+jobs:
+  compile:
+    runs-on: windows-2019
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
+          ref: v0.16
+
+      - name: Extract Exiv2 source
+        shell: bash
+        run: |
+          wget -nv \
+          https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.1.tar.gz \
+          -O - | tar -xz
+          mv exiv2-0.28.1 exiv2-Source
+
+      - name: Install dependencies
+        run: pip install --disable-pip-version-check wheel conan==1.59.0
+
+      - name: Configure libexiv2 build
+        working-directory: ./exiv2-Source
+        run: >
+          cmake --preset msvc
+          -DCMAKE_BUILD_TYPE=Release
+          -DEXIV2_BUILD_SAMPLES=OFF
+          -DEXIV2_BUILD_EXIV2_COMMAND=OFF
+          -DEXIV2_BUILD_UNIT_TESTS=OFF
+          -G "Visual Studio 16 2019"
+
+      - name: Build libexiv2
+        working-directory: ./exiv2-Source
+        run: |
+          cmake --build build-msvc --config Release
+          cmake --install build-msvc --config Release
+          copy build-msvc\bin\libcurl.dll build-msvc\install\bin
+
+      - name: Store intermediate files
+        uses: actions/upload-artifact@v3
+        with:
+          name: exiv2-windows
+          path: ./exiv2-Source/build-msvc\install
+          retention-days: 1
+
+  wheels:
+    needs: compile
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
+          ref: v0.16
+
+      - name: Fetch intermediate files
+        uses: actions/download-artifact@v3
+        with:
+          name: exiv2-windows
+          path: lib_exiv2
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+
+      - name: Build wheel
+        run: |
+          pip3 install --disable-pip-version-check setuptools wheel
+          pip wheel -v .
+        env:
+          EXIV2_ROOT: lib_exiv2
+
+      - name: Store results
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-wheel
+          path: ./*.whl
+
+  test:
+    needs: wheels
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+    steps:
+      - name: Fetch wheel files
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-wheel
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+
+      - name: Install wheel
+        run: pip3 install --disable-pip-version-check --no-index --find-links=. exiv2
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
+          ref: v0.16
+
+      - name: Get package details
+        run: python3 -m exiv2
+
+      - name: Run unit tests
+        run: python3 -m unittest discover tests -v
