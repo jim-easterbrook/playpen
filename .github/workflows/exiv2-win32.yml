@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   compile:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
 
   wheels:
     needs: compile
-    runs-on: windows-2019
+    runs-on: windows-2022
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
@@ -90,7 +90,7 @@ jobs:
 
   test:
     needs: wheels
-    runs-on: windows-2019
+    runs-on: windows-2022
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
