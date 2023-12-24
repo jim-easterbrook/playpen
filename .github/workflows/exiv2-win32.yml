@@ -38,18 +38,18 @@ jobs:
         working-directory: ./libexiv2
         run: |
           cmake -B build-win32 -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_INSTALL_PREFIX=build-win32/install \
-          -DEXIV2_ENABLE_WIN_UNICODE=ON \
-          -DEXIV2_BUILD_SAMPLES=OFF \
-          -DEXIV2_BUILD_EXIV2_COMMAND=OFF \
-          -DEXIV2_ENABLE_BMFF=ON \
-          -DEXIV2_ENABLE_NLS=OFF \
-          -DEXIV2_ENABLE_VIDEO=ON \
-          -DEXIV2_ENABLE_WEBREADY=ON \
-          -DCMAKE_CXX_STANDARD=98 \
-          -G "Visual Studio 16 2019" -A x64
-        run: cmake --build build-win32 --config Release
-        run: cmake --install build-win32 --config Release
+            -DCMAKE_INSTALL_PREFIX=build-win32/install \
+            -DEXIV2_ENABLE_WIN_UNICODE=ON \
+            -DEXIV2_BUILD_SAMPLES=OFF \
+            -DEXIV2_BUILD_EXIV2_COMMAND=OFF \
+            -DEXIV2_ENABLE_BMFF=ON \
+            -DEXIV2_ENABLE_NLS=OFF \
+            -DEXIV2_ENABLE_VIDEO=ON \
+            -DEXIV2_ENABLE_WEBREADY=ON \
+            -DCMAKE_CXX_STANDARD=98 \
+            -G "Visual Studio 16 2019" -A x64
+          cmake --build build-win32 --config Release
+          cmake --install build-win32 --config Release
 
       - name: Store intermediate files
         uses: actions/upload-artifact@v3
