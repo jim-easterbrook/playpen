@@ -27,27 +27,35 @@ jobs:
         working-directory: ./libexiv2
         run: mkdir build-win32
 
-      - name: Install dependencies
+      - name: Install pip dependencies
         working-directory: ./libexiv2/build-win32
-        run: |
+        run: >
           pip install --disable-pip-version-check wheel conan==1.59.0
-          conan install .. -o unitTests=False -o iconv=True ``
+
+      - name: Install conan dependencies
+        working-directory: ./libexiv2/build-win32
+        run: >
+          conan install .. -o unitTests=False -o iconv=True
             -o webready=True -b missing
 
       - name: Configure build
         working-directory: ./libexiv2
-        run: |
-          cmake -B build-win32 -DCMAKE_BUILD_TYPE=Release ``
-            -DCMAKE_INSTALL_PREFIX=build-win32/install ``
-            -DEXIV2_ENABLE_WIN_UNICODE=ON ``
-            -DEXIV2_BUILD_SAMPLES=OFF ``
-            -DEXIV2_BUILD_EXIV2_COMMAND=OFF ``
-            -DEXIV2_ENABLE_BMFF=ON ``
-            -DEXIV2_ENABLE_NLS=OFF ``
-            -DEXIV2_ENABLE_VIDEO=ON ``
-            -DEXIV2_ENABLE_WEBREADY=ON ``
-            -DCMAKE_CXX_STANDARD=98 ``
+        run: >
+          cmake -B build-win32 -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_INSTALL_PREFIX=build-win32/install
+            -DEXIV2_ENABLE_WIN_UNICODE=ON
+            -DEXIV2_BUILD_SAMPLES=OFF
+            -DEXIV2_BUILD_EXIV2_COMMAND=OFF
+            -DEXIV2_ENABLE_BMFF=ON
+            -DEXIV2_ENABLE_NLS=OFF
+            -DEXIV2_ENABLE_VIDEO=ON
+            -DEXIV2_ENABLE_WEBREADY=ON
+            -DCMAKE_CXX_STANDARD=98
             -G "Visual Studio 16 2019" -A x64
+
+      - name: Do build
+        working-directory: ./libexiv2
+        run: |
           cmake --build build-win32 --config Release
           cmake --install build-win32 --config Release
 
