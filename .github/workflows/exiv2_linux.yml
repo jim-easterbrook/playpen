@@ -21,7 +21,7 @@ jobs:
         shell: bash
         run: |
           tar -xzf exiv2.tar.gz
-          mv exiv2-0.28.1 libexiv2
+          mv exiv2-0.27.7-Source libexiv2
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
