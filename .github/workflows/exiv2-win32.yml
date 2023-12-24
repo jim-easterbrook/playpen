@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   compile:
-    runs-on: windows-2022
+    runs-on: windows-2019
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
           -DEXIV2_BUILD_SAMPLES=OFF
           -DEXIV2_BUILD_EXIV2_COMMAND=OFF
           -DEXIV2_BUILD_UNIT_TESTS=OFF
-          -G "Visual Studio 17 2022"
+          -G "Visual Studio 16 2019"
 
       - name: Build libexiv2
         working-directory: ./exiv2-Source
@@ -52,7 +52,7 @@ jobs:
 
   wheels:
     needs: compile
-    runs-on: windows-2022
+    runs-on: windows-2019
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
@@ -90,7 +90,7 @@ jobs:
 
   test:
     needs: wheels
-    runs-on: windows-2022
+    runs-on: windows-2019
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']

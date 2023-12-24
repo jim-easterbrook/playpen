@@ -1,47 +1,45 @@
-name: Build exiv2 manylinux wheel
+name: Build Linux wheels exiv2 0.28
 on: workflow_dispatch
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      EXIV2_ROOT: /project/exiv2-install
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: jim-easterbrook/python-exiv2
+          ref: v0.16
 
-      - name: Download libexiv2
+      - name: Fetch Exiv2 source
+        run: >
+          wget -nv
+          https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.1.tar.gz
+          -O exiv2.tar.gz
+
+      - name: Extract Exiv2 source
         run: |
-          wget -nv https://github.com/Exiv2/exiv2/releases/download/v0.27.6/exiv2-0.27.6-Source.tar.gz
-          tar xf exiv2-0.27.6-Source.tar.gz
+          tar -xzf exiv2.tar.gz
+          mv exiv2-0.28.1 libexiv2
 
-      - name: Build wheel
-        uses: pypa/cibuildwheel@v2.12.1
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.16.2
         env:
           CIBW_ARCHS: auto64
-          CIBW_ENVIRONMENT: PIP_BUILD_OPTION="--py-limited-api=cp36"
-          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_ROOT
-          CIBW_BUILD: cp36-manylinux_x86_64
+          CIBW_ENVIRONMENT: EXIV2_ROOT=libexiv2/build-linux-release-NoConan/install
+          CIBW_BUILD: cp*-manylinux_x86_64
           CIBW_BEFORE_ALL: >
             yum install -y zlib-devel expat-devel gettext-devel &&
-            cd exiv2-0.27.6-Source &&
-            mkdir build &&
-            cd build &&
-            cmake .. -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_INSTALL_PREFIX=${{ env.EXIV2_ROOT }} \
-              -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations" \
-              -DEXIV2_BUILD_SAMPLES=OFF \
-              -DEXIV2_BUILD_EXIV2_COMMAND=OFF \
-              -DEXIV2_ENABLE_BMFF=ON \
-              -DEXIV2_ENABLE_NLS=ON \
-              -DEXIV2_ENABLE_VIDEO=ON \
-              -DCMAKE_CXX_STANDARD=98 &&
-            cmake --build . &&
-            cmake --install . &&
-            cd ../.. &&
-            python utils/build_swig.py ${{ env.EXIV2_ROOT }}/include
+            cd libexiv2 &&
+            cmake --preset linux-release-NoConan \
+            -DEXIV2_BUILD_SAMPLES=OFF \
+            -DEXIV2_BUILD_UNIT_TESTS=OFF \
+            -DEXIV2_ENABLE_NLS=ON \
+            -DEXIV2_BUILD_EXIV2_COMMAND=OFF \
+            -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF \
+            -DCMAKE_CXX_FLAGS="-Wno-unused-variable" &&
+            cmake --build build-linux-release-NoConan --config Release &&
+            cmake --install build-linux-release-NoConan --config Release
 
       - name: Store results
         uses: actions/upload-artifact@v3
@@ -53,7 +51,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
         os: [ubuntu-latest]
         include:
           - python-version: '3.6'
@@ -75,12 +73,13 @@ jobs:
         run: pip3 install --disable-pip-version-check --no-index --find-links=. exiv2
 
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: jim-easterbrook/python-exiv2
+          ref: v0.16
 
       - name: Get package details
         run: python3 -m exiv2
 
       - name: Run unit tests
-        run: python3 -m unittest discover tests
+        run: python3 -m unittest discover tests -v
