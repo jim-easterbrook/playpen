@@ -26,22 +26,19 @@ jobs:
         uses: pypa/cibuildwheel@v2.16.2
         env:
           CIBW_ARCHS: auto64
-          CIBW_ENVIRONMENT: EXIV2_ROOT=libexiv2/build-linux-release-NoConan/install
+          CIBW_ENVIRONMENT: EXIV2_ROOT=libexiv2/build-linux-release/install
           CIBW_BUILD: cp*-manylinux_x86_64
           CIBW_BEFORE_ALL: |
-            yum install -y zlib-devel expat-devel gettext-devel \
-            brotli-devel curl-devel
-            pip install ninja
+            pip install ninja conan==1.59
             cd libexiv2
-            cmake --preset linux-release-NoConan \
+            cmake --preset linux-release \
             -DEXIV2_BUILD_SAMPLES=OFF \
             -DEXIV2_BUILD_UNIT_TESTS=OFF \
             -DEXIV2_ENABLE_NLS=ON \
             -DEXIV2_BUILD_EXIV2_COMMAND=OFF \
-            -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF \
-            -DCMAKE_CXX_FLAGS="-Wno-unused-variable"
-            cmake --build build-linux-release-NoConan --config Release
-            cmake --install build-linux-release-NoConan --config Release
+            -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
+            cmake --build build-linux-release --config Release
+            cmake --install build-linux-release --config Release
 
       - name: Store results
         uses: actions/upload-artifact@v3
