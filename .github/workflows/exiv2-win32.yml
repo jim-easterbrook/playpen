@@ -28,7 +28,6 @@ jobs:
         run: mkdir build-win32
 
       - name: Install pip dependencies
-        working-directory: ./libexiv2/build-win32
         run: >
           pip install --disable-pip-version-check wheel conan==1.59.0
 
@@ -63,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: exiv2-windows
-          path: ./exiv2-Source/local_install
+          path: ./libexiv2/build-win32/install
           retention-days: 1
 
   wheels:
@@ -94,7 +93,6 @@ jobs:
       - name: Build wheel
         run: |
           pip3 install --disable-pip-version-check setuptools wheel
-          python3 utils/build_swig.py lib_exiv2/include
           pip wheel -v .
         env:
           EXIV2_ROOT: lib_exiv2
