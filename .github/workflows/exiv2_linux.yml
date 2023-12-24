@@ -41,6 +41,8 @@ jobs:
               -DEXIV2_ENABLE_NLS=ON \
               -DEXIV2_ENABLE_VIDEO=ON \
               -DEXIV2_ENABLE_WEBREADY=ON \
+              -DEXIV2_ENABLE_CURL=ON \
+              -DEXIV2_ENABLE_SSH=ON \
               -DCMAKE_CXX_STANDARD=98
             cmake --build build-linux
             cmake --install build-linux
