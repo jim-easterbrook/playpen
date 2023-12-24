@@ -1,4 +1,4 @@
-name: Build python-exiv2 for Windows
+name: Build Windows wheels exiv2 0.27
 on: workflow_dispatch
 
 jobs:
@@ -14,40 +14,48 @@ jobs:
       - name: Fetch Exiv2 source
         run: >
           c:\msys64\usr\bin\wget.exe -nv
-          https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.1.tar.gz
+          https://github.com/Exiv2/exiv2/releases/download/v0.27.7/exiv2-0.27.7-Source.tar.gz
           -O exiv2.tar.gz
 
       - name: Extract Exiv2 source
         shell: bash
         run: |
           tar -xzf exiv2.tar.gz
-          mv exiv2-0.28.1 exiv2-Source
+          mv exiv2-0.27.7-Source libexiv2
+
+      - name: Make directories
+        working-directory: ./libexiv2
+        run: mkdir build-win32
 
       - name: Install dependencies
-        run: pip install --disable-pip-version-check wheel conan==1.59.0
-
-      - name: Configure libexiv2 build
-        working-directory: ./exiv2-Source
-        run: >
-          cmake --preset msvc
-          -DCMAKE_BUILD_TYPE=Release
-          -DEXIV2_BUILD_SAMPLES=OFF
-          -DEXIV2_BUILD_EXIV2_COMMAND=OFF
-          -DEXIV2_BUILD_UNIT_TESTS=OFF
-          -G "Visual Studio 16 2019"
-
-      - name: Build libexiv2
-        working-directory: ./exiv2-Source
+        working-directory: ./libexiv2/build-win32
         run: |
-          cmake --build build-msvc --config Release
-          cmake --install build-msvc --config Release
-          copy build-msvc\bin\libcurl.dll build-msvc\install\bin
+          pip install --disable-pip-version-check wheel conan==1.59.0
+          conan install .. -o unitTests=False -o iconv=True \
+            -o webready=True -b missing
+
+      - name: Configure build
+        working-directory: ./libexiv2
+        run: |
+          cmake -B build-win32 -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=build-win32/install \
+          -DEXIV2_ENABLE_WIN_UNICODE=ON \
+          -DEXIV2_BUILD_SAMPLES=OFF \
+          -DEXIV2_BUILD_EXIV2_COMMAND=OFF \
+          -DEXIV2_ENABLE_BMFF=ON \
+          -DEXIV2_ENABLE_NLS=OFF \
+          -DEXIV2_ENABLE_VIDEO=ON \
+          -DEXIV2_ENABLE_WEBREADY=ON \
+          -DCMAKE_CXX_STANDARD=98 \
+          -G "Visual Studio 16 2019" -A x64
+        run: cmake --build build-win32 --config Release
+        run: cmake --install build-win32 --config Release
 
       - name: Store intermediate files
         uses: actions/upload-artifact@v3
         with:
           name: exiv2-windows
-          path: ./exiv2-Source/build-msvc\install
+          path: ./exiv2-Source/local_install
           retention-days: 1
 
   wheels:
@@ -78,6 +86,7 @@ jobs:
       - name: Build wheel
         run: |
           pip3 install --disable-pip-version-check setuptools wheel
+          python3 utils/build_swig.py lib_exiv2/include
           pip wheel -v .
         env:
           EXIV2_ROOT: lib_exiv2
@@ -111,12 +120,9 @@ jobs:
 
       - name: Check out repository code
         uses: actions/checkout@v4
-        with:
-          repository: jim-easterbrook/python-exiv2
-          ref: v0.16
 
       - name: Get package details
         run: python3 -m exiv2
 
       - name: Run unit tests
-        run: python3 -m unittest discover tests -v
+        run: python3 -m unittest discover tests
