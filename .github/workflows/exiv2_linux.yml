@@ -29,6 +29,7 @@ jobs:
           CIBW_ENVIRONMENT: EXIV2_ROOT=libexiv2/build-linux-release/install
           CIBW_BUILD: cp*-manylinux_x86_64
           CIBW_BEFORE_ALL: |
+            yum install -y gettext-devel
             pip install ninja conan==1.59
             cd libexiv2
             cmake --preset linux-release \
