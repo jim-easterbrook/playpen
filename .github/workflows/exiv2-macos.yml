@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: jim-easterbrook/python-exiv2
-          ref: v0.16
+          ref: test_nls
 
       - name: Fetch Exiv2 source
         run: >
@@ -81,7 +81,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: jim-easterbrook/python-exiv2
-          ref: v0.16
+          ref: test_nls
 
       - name: Get package details
         run: python3 -m exiv2 -v
