@@ -36,7 +36,6 @@ jobs:
             brew install ninja inih &&
             cd libexiv2 &&
             cmake --preset base_mac
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
             -DEXIV2_BUILD_SAMPLES=OFF
             -DEXIV2_BUILD_UNIT_TESTS=OFF
             -DEXIV2_ENABLE_NLS=ON
@@ -70,8 +69,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
 
+      - name: List locales
+        run: locale -a | grep de
+
       - name: Install wheel
-        run: pip3 install --disable-pip-version-check --no-index --find-links=. exiv2
+        run: >
+          pip3 install --disable-pip-version-check --no-index
+          --find-links=. exiv2
 
       - name: Check out repository code
         uses: actions/checkout@v4
