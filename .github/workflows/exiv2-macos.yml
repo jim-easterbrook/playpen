@@ -36,6 +36,7 @@ jobs:
             brew install ninja &&
             cd libexiv2 &&
             cmake --preset base_mac
+            -DCONAN_AUTO_INSTALL=ON
             -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14
             -DCMAKE_CXX_STANDARD=17
             -DEXIV2_BUILD_SAMPLES=OFF
