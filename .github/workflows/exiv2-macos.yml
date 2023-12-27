@@ -23,6 +23,11 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.28.1 libexiv2
 
+      - name: List presets
+        run: |
+          cd libexiv2
+          cmake --list-presets
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         env:
@@ -33,7 +38,6 @@ jobs:
           CIBW_BEFORE_ALL: >
             brew install ninja gettext &&
             cd libexiv2 &&
-            cmake --list-presets &&
             cmake . -B build-macos -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=build-macos/install
             -DEXIV2_BUILD_SAMPLES=OFF
