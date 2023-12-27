@@ -3,7 +3,8 @@ import os
 import sys
 
 print('setting locale')
-locale.setlocale(locale.LC_MESSAGES, 'de_DE')
+os.environ['LANGUAGE'] = 'de_DE'
+locale.setlocale(locale.LC_MESSAGES, '')
 
 import exiv2
 
