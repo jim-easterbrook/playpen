@@ -34,8 +34,10 @@ jobs:
           CIBW_BUILD: cp38*
           CIBW_BEFORE_ALL: >
             brew install ninja &&
+            pip install --disable-pip-version-check conan==1.59.0 &&
             cd libexiv2 &&
             cmake --preset base_mac
+            -DCONAN_AUTO_INSTALL=ON
             -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
             -DCMAKE_CXX_STANDARD=17
             -DEXIV2_BUILD_SAMPLES=OFF
