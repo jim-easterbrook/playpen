@@ -11,9 +11,9 @@ def main():
     except exiv2.Exiv2Error as ex:
         print(str(ex))
     print('setting locale')
-##    os.environ['LANGUAGE'] = 'de_DE'
-##    locale.setlocale(locale.LC_MESSAGES, '')
-    locale.setlocale(locale.LC_MESSAGES, 'de_DE')
+    os.environ['LANGUAGE'] = 'de_DE'
+    locale.setlocale(locale.LC_MESSAGES, '')
+##    locale.setlocale(locale.LC_MESSAGES, 'de_DE')
     print('translated')
     try:
         exiv2.ImageFactory.open(__file__)
