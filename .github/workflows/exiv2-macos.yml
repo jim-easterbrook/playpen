@@ -37,7 +37,6 @@ jobs:
             cd libexiv2 &&
             cmake --preset base_mac
             -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
-            -DCMAKE_CXX_STANDARD=17
             -DEXIV2_BUILD_SAMPLES=OFF
             -DEXIV2_BUILD_UNIT_TESTS=OFF
             -DEXIV2_ENABLE_NLS=ON
