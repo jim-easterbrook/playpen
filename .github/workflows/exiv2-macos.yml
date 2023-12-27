@@ -29,14 +29,14 @@ jobs:
           CIBW_ARCHS: x86_64
           CIBW_ENVIRONMENT: >
             EXIV2_ROOT=libexiv2/build-base_mac/install
-            MACOSX_DEPLOYMENT_TARGET="10.14"
-            CMAKE_OSX_DEPLOYMENT_TARGET="10.14"
+            MACOSX_DEPLOYMENT_TARGET=10.14
           CIBW_SKIP: pp3*
           CIBW_BUILD: cp38*
           CIBW_BEFORE_ALL: >
             brew install ninja &&
             cd libexiv2 &&
             cmake --preset base_mac
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14
             -DEXIV2_BUILD_SAMPLES=OFF
             -DEXIV2_BUILD_UNIT_TESTS=OFF
             -DEXIV2_ENABLE_NLS=ON
