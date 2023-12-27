@@ -33,11 +33,9 @@ jobs:
           CIBW_SKIP: pp3*
           CIBW_BUILD: cp38*
           CIBW_BEFORE_ALL: >
-            brew install ninja &&
-            pip install conan==1.59.0 "cython<3.0" PyYAML==6.0.1 &&
+            brew install ninja inih &&
             cd libexiv2 &&
             cmake --preset base_mac
-            -DCONAN_AUTO_INSTALL=ON
             -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
             -DCMAKE_CXX_STANDARD=17
             -DEXIV2_BUILD_SAMPLES=OFF
