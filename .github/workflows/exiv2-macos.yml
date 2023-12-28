@@ -36,14 +36,15 @@ jobs:
             brew install ninja inih &&
             cd libexiv2 &&
             cmake --preset base_mac
-            -DEXIV2_BUILD_SAMPLES=OFF
-            -DEXIV2_BUILD_UNIT_TESTS=OFF
-            -DEXIV2_ENABLE_NLS=ON
-            -DEXIV2_BUILD_EXIV2_COMMAND=OFF
-            -DCMAKE_CXX_STANDARD=17
-            -DCMAKE_REQUIRED_FLAGS="-std=c++17"
-            -DCMAKE_OSX_ARCHITECTURES=arm64
-            -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF &&
+            -D EXIV2_BUILD_SAMPLES=OFF
+            -D EXIV2_BUILD_UNIT_TESTS=OFF
+            -D EXIV2_ENABLE_NLS=ON
+            -D EXIV2_BUILD_EXIV2_COMMAND=OFF
+            -D CMAKE_CXX_STANDARD=17
+            -D CMAKE_REQUIRED_FLAGS="-std=c++17"
+            -D CMAKE_OSX_ARCHITECTURES=arm64
+            -D CMAKE_OSX_DEPLOYMENT_TARGET=11.0
+            -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF &&
             cmake --build build-base_mac &&
             cmake --install build-base_mac
 
