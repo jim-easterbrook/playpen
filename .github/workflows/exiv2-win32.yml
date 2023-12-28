@@ -39,6 +39,10 @@ jobs:
         shell: bash
         run: unzip ../gettext.zip
 
+      - name: List directories
+        shell: bash
+        run: ls -l ${{ github.workspace }}/gettext
+
       - name: Install pip dependencies
         run: >
           pip install --disable-pip-version-check wheel conan==1.59.0
