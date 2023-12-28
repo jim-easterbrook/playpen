@@ -69,9 +69,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
 
-      - name: List locales
-        run: locale -a | grep de
-
       - name: Install wheel
         run: >
           pip3 install --disable-pip-version-check --no-index
