@@ -41,7 +41,7 @@ jobs:
 
       - name: List directories
         shell: bash
-        run: ls -l ${{ github.workspace }}/gettext
+        run: ls -l '${{ github.workspace }}/gettext'
 
       - name: Install pip dependencies
         run: >
@@ -58,7 +58,7 @@ jobs:
         run: >
           cmake -B build-win32 -DCMAKE_BUILD_TYPE=Release
           -D CMAKE_INSTALL_PREFIX=build-win32/install
-          -D CMAKE_PREFIX_PATH=${{ github.workspace }}/gettext
+          -D CMAKE_PREFIX_PATH='${{ github.workspace }}/gettext'
           -D EXIV2_ENABLE_WIN_UNICODE=ON
           -D EXIV2_BUILD_SAMPLES=OFF
           -D EXIV2_BUILD_EXIV2_COMMAND=OFF
