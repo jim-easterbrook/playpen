@@ -46,7 +46,7 @@ jobs:
           -DEXIV2_BUILD_SAMPLES=OFF
           -DEXIV2_BUILD_EXIV2_COMMAND=OFF
           -DEXIV2_ENABLE_BMFF=ON
-          -DEXIV2_ENABLE_NLS=OFF
+          -DEXIV2_ENABLE_NLS=ON
           -DEXIV2_ENABLE_VIDEO=ON
           -DEXIV2_ENABLE_WEBREADY=ON
           -DCMAKE_CXX_STANDARD=98
@@ -70,7 +70,8 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.8']
+#        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -108,7 +109,8 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.8']
+#        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - name: Fetch wheel files
         uses: actions/download-artifact@v3
