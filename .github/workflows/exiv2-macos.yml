@@ -1,4 +1,4 @@
-name: Build MacOS wheels exiv2 0.28
+name: Build MacOS ARM wheels exiv2 0.28
 on: workflow_dispatch
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         env:
-          CIBW_ARCHS: x86_64
+          CIBW_ARCHS: arm64
           CIBW_ENVIRONMENT: >
             EXIV2_ROOT=libexiv2/build-base_mac/install
             MACOSX_DEPLOYMENT_TARGET="11.0"
@@ -47,44 +47,5 @@ jobs:
       - name: Store results
         uses: actions/upload-artifact@v3
         with:
-          name: macos-wheel
+          name: macos-arm-wheel
           path: wheelhouse/*.whl
-
-  test:
-    needs: build
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        python-version: ['3.8']
-#        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
-    steps:
-      - name: Fetch wheel files
-        uses: actions/download-artifact@v3
-        with:
-          name: macos-wheel
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: 'x64'
-
-      - name: List locale
-        run: locale
-
-      - name: Install wheel
-        run: >
-          pip3 install --disable-pip-version-check --no-index
-          --find-links=. exiv2
-
-      - name: Check out repository code
-        uses: actions/checkout@v4
-        with:
-          repository: jim-easterbrook/python-exiv2
-          ref: v0.16
-
-      - name: Get package details
-        run: python3 -m exiv2 -v
-
-      - name: Run unit tests
-        run: python3 -m unittest discover tests -v
