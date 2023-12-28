@@ -32,11 +32,14 @@ jobs:
       - name: Install gettext
         shell: bash
         run: |
-          mkdir build-win32
           mkdir gettext
           cd gettext
           unzip ../gettext.zip
           echo "$PWD" >> $GITHUB_PATH
+
+      - name: Make directories
+        working-directory: ./libexiv2
+        run: mkdir build-win32
 
       - name: Install pip dependencies
         run: >
