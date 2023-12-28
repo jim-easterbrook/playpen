@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           echo -e "[requires]\nlibgettext/0.21" >conanfile.txt
-          conan install conanfile.txt -b missing
+          conan install conanfile.txt -b missing -g cmake_find_package -g cmake_paths
 
       - name: Configure build
         working-directory: ./libexiv2
