@@ -23,9 +23,18 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.27.7-Source libexiv2
 
-      - name: Make directories
-        working-directory: ./libexiv2
-        run: mkdir build-win32
+      - name: Fetch gettext
+        run: >
+          c:\msys64\usr\bin\wget.exe -nv
+          https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-shared-64.zip
+          -O gettext.zip
+
+      - name: Install gettext
+        shell: bash
+        run: |
+          unzip gettext.zip
+          mv gettext0.21-iconv1.16-shared-64 gettext
+          echo "$PWD/gettext" >> $GITHUB_PATH
 
       - name: Install pip dependencies
         run: >
