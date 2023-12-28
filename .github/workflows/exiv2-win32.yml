@@ -22,6 +22,7 @@ jobs:
         run: |
           tar -xzf exiv2.tar.gz
           mv exiv2-0.27.7-Source libexiv2
+          rm libexiv2/cmake/FindIconv.cmake
 
       - name: Make directories
         run: |
@@ -50,7 +51,7 @@ jobs:
       - name: Install conan dependencies
         working-directory: ./libexiv2/build-win32
         run: >
-          conan install .. -o unitTests=False -o iconv=False
+          conan install .. -o unitTests=False -o iconv=True
           -o webready=True -b missing
 
       - name: Install libintl
