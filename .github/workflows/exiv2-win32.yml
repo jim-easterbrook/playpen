@@ -53,6 +53,11 @@ jobs:
           conan install .. -o unitTests=False -o iconv=True
           -o webready=True -b missing
 
+      - name: Install libintl
+        working-directory: ./libexiv2/build-win32
+        run: >
+          conan install --requires libgettext/0.21 -b missing
+
       - name: Configure build
         working-directory: ./libexiv2
         run: >
