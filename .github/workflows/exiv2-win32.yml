@@ -50,7 +50,7 @@ jobs:
       - name: Install conan dependencies
         working-directory: ./libexiv2/build-win32
         run: >
-          conan install .. -o unitTests=False -o iconv=True
+          conan install .. -o unitTests=False -o iconv=False
           -o webready=True -b missing
 
       - name: Install libintl
