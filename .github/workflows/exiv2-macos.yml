@@ -40,8 +40,8 @@ jobs:
             -DEXIV2_BUILD_UNIT_TESTS=OFF
             -DEXIV2_ENABLE_NLS=ON
             -DEXIV2_BUILD_EXIV2_COMMAND=OFF
+            -DCMAKE_CXX_STANDARD=17
             -DCMAKE_OSX_ARCHITECTURES=arm64
-            -DCMAKE_CXX_FLAGS="-enable-libstdcxx-filesystem-ts"
             -DEXIV2_TEAM_WARNINGS_AS_ERRORS=OFF &&
             cmake --build build-base_mac &&
             cmake --install build-base_mac
