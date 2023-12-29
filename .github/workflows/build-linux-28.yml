@@ -26,10 +26,6 @@ jobs:
         run: >
           wget -nv
           https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/i/inih-57-1.el8.x86_64.rpm
-
-      - name: Download inih-devel
-        run: >
-          wget -nv
           https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/i/inih-devel-57-1.el8.x86_64.rpm
 
       - name: Build wheels
