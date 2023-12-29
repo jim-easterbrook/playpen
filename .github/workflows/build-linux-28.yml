@@ -22,6 +22,11 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.28.1 libexiv2
 
+      - name: Download inih
+        run: >
+          wget -nv
+          https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/i/inih-devel-57-1.el8.x86_64.rpm
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         env:
@@ -35,10 +40,12 @@ jobs:
           CIBW_BEFORE_ALL: >
             yum install -y zlib-devel expat-devel gettext-devel
             libcurl-devel libssh-devel brotli-devel &&
-            pip install ninja conan==1.59.0 &&
+            rpm -Uvh inih*.rpm &&
+            dnf install inih-devel &&
+            pip install ninja &&
             cd libexiv2 &&
             cmake --preset linux-release
-            -D CONAN_AUTO_INSTALL=ON
+            -D CONAN_AUTO_INSTALL=OFF
             -D EXIV2_BUILD_SAMPLES=OFF
             -D EXIV2_BUILD_UNIT_TESTS=OFF
             -D EXIV2_ENABLE_NLS=ON
