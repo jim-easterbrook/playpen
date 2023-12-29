@@ -27,6 +27,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.16.2
         env:
           CIBW_ARCHS: auto64
+          CIBW_SKIP: pp3*
           CIBW_ENVIRONMENT: EXIV2_ROOT=libexiv2/build-msvc/install
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
