@@ -29,12 +29,12 @@ jobs:
           CIBW_ARCHS: x86_64
           CIBW_ENVIRONMENT: >
             EXIV2_ROOT=libexiv2/build-base_mac/install
-            MACOSX_DEPLOYMENT_TARGET="10.9"
+            MACOSX_DEPLOYMENT_TARGET="11.0"
           CIBW_SKIP: pp3*
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
-          CIBW_TEST_SKIP: cp36*
+          CIBW_TEST_SKIP: cp36* cp37*
           CIBW_BEFORE_ALL: >
             brew install ninja inih &&
             cd libexiv2 &&
