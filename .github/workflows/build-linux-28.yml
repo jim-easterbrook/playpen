@@ -36,7 +36,7 @@ jobs:
             yum install -y zlib-devel expat-devel gettext-devel
             libcurl-devel libssh-devel brotli-devel &&
             dnf makecache &&
-            dnf install inih.x86_64 &&
+            dnf install inih &&
             pip install ninja &&
             cd libexiv2 &&
             cmake --preset linux-release
