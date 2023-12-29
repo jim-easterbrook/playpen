@@ -35,8 +35,8 @@ jobs:
           CIBW_BEFORE_ALL: >
             pip install conan==1.59.0 &&
             cd libexiv2 &&
-            conan install . -of build-msvc -o unitTests=False -o iconv=True
-            -o webready=True -b missing &&
+            conan install . -of build-msvc -if build-msvc -o unitTests=False
+            -o iconv=True -o webready=True -b missing &&
             cmake -B build-msvc -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=build-msvc/install
             -DEXIV2_ENABLE_WIN_UNICODE=ON
