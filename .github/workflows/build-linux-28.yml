@@ -35,12 +35,10 @@ jobs:
           CIBW_BEFORE_ALL: >
             yum install -y zlib-devel expat-devel gettext-devel
             libcurl-devel libssh-devel brotli-devel &&
-            dnf makecache &&
-            dnf install inih &&
-            pip install ninja &&
+            pip install ninja conan==1.59.0 &&
             cd libexiv2 &&
             cmake --preset linux-release
-            -D CONAN_AUTO_INSTALL=OFF
+            -D CONAN_AUTO_INSTALL=ON
             -D EXIV2_BUILD_SAMPLES=OFF
             -D EXIV2_BUILD_UNIT_TESTS=OFF
             -D EXIV2_ENABLE_NLS=ON
