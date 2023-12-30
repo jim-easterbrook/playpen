@@ -38,6 +38,7 @@ jobs:
             brew install ninja inih &&
             cd libexiv2 &&
             cmake --preset base_mac
+            -D CMAKE_OSX_ARCHITECTURES=arm64
             -D EXIV2_BUILD_SAMPLES=OFF
             -D EXIV2_BUILD_UNIT_TESTS=OFF
             -D EXIV2_ENABLE_NLS=ON
