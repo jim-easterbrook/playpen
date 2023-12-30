@@ -47,6 +47,9 @@ jobs:
             -D EXIV2_ENABLE_BMFF=ON
             -D EXIV2_ENABLE_NLS=ON
             -D EXIV2_ENABLE_VIDEO=ON
+            -D EXIV2_ENABLE_WEBREADY=ON
+            -D EXIV2_ENABLE_CURL=ON
+            -D EXIV2_ENABLE_SSH=ON
             -D CMAKE_CXX_STANDARD=98
             -D CMAKE_OSX_ARCHITECTURES=arm64
             -G Ninja &&
