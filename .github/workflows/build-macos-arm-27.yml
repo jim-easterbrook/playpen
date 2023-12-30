@@ -38,7 +38,7 @@ jobs:
             cmake . -B build-macos -DCMAKE_BUILD_TYPE=Release
             -D CMAKE_INSTALL_PREFIX=build-macos/install
             -D CMAKE_CXX_FLAGS="-Wno-deprecated-declarations
-            -fvisibility=hidden"
+            -fvisibility=hidden -fvisibility-inlines-hidden"
             -D EXIV2_BUILD_SAMPLES=OFF
             -D EXIV2_BUILD_EXIV2_COMMAND=OFF
             -D EXIV2_ENABLE_BMFF=ON
