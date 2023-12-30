@@ -29,7 +29,7 @@ jobs:
           CIBW_ARCHS: arm64
           CIBW_ENVIRONMENT: >
             EXIV2_ROOT=libexiv2/build-base_mac/install
-            MACOSX_DEPLOYMENT_TARGET="11.0"
+            MACOSX_DEPLOYMENT_TARGET="10.15"
           CIBW_SKIP: pp3*
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
@@ -39,6 +39,7 @@ jobs:
             cd libexiv2 &&
             cmake --preset base_mac
             -D CMAKE_OSX_ARCHITECTURES=arm64
+            -D CMAKE_OSX_DEPLOYMENT_TARGET=10.15
             -D EXIV2_BUILD_SAMPLES=OFF
             -D EXIV2_BUILD_UNIT_TESTS=OFF
             -D EXIV2_ENABLE_NLS=ON
