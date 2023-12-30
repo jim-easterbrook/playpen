@@ -23,6 +23,9 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.27.7-Source libexiv2
 
+      - name: Install pipx
+        run: pip install pipx
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         env:
