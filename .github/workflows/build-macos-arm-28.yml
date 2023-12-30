@@ -39,6 +39,7 @@ jobs:
             python -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
             brew install ninja inih gettext &&
+            brew unlink gettext && brew link gettext --force &&
             cd libexiv2 &&
             cmake --preset base_mac
             -D CMAKE_OSX_ARCHITECTURES=arm64
