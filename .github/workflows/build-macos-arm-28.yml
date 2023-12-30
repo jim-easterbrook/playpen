@@ -37,7 +37,7 @@ jobs:
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
-          CIBW_TEST_SKIP: cp38-macosx_*:arm64
+          CIBW_TEST_SKIP: cp38-*
           CIBW_BEFORE_ALL: >
             brew install ninja inih &&
             cd libexiv2 &&
