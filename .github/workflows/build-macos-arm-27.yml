@@ -37,7 +37,7 @@ jobs:
             python -m unittest discover {project}/tests -v
           CIBW_TEST_SKIP: cp38-*
           CIBW_BEFORE_ALL: >
-            brew install ninja &&
+            brew install ninja ssh curl &&
             cd libexiv2 &&
             cmake . -B build-macos -DCMAKE_BUILD_TYPE=Release
             -D CMAKE_INSTALL_PREFIX=build-macos/install
