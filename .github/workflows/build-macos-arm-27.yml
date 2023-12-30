@@ -37,7 +37,7 @@ jobs:
             cd libexiv2 &&
             cmake . -B build-macos -DCMAKE_BUILD_TYPE=Release
             -D CMAKE_INSTALL_PREFIX=build-macos/install
-            -D EXTRA_COMPILE_FLAGS="-fvisibility=hidden"
+            -D CMAKE_CXX_VISIBILITY_PRESET=hidden
             -D CMAKE_CXX_FLAGS="-Wno-deprecated-declarations"
             -D EXIV2_BUILD_SAMPLES=OFF
             -D EXIV2_BUILD_EXIV2_COMMAND=OFF
