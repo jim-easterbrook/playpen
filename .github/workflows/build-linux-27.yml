@@ -50,7 +50,7 @@ jobs:
             -D CMAKE_CXX_STANDARD=98 &&
             cmake --build build-linux &&
             cmake --install build-linux &&
-            localectl list-locales
+            locale -a
 
       - name: Store results
         uses: actions/upload-artifact@v3
