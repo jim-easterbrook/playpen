@@ -50,6 +50,7 @@ jobs:
             -D CMAKE_CXX_STANDARD=98 &&
             cmake --build build-linux &&
             cmake --install build-linux &&
+            localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
             locale -a
 
       - name: Store results
