@@ -37,7 +37,7 @@ jobs:
           mv exiv2-0.27.7-Source libexiv2
           # tweaks to allow NLS
           cp conanfile_ex.py libexiv2
-          del libexiv2/cmake/FindIconv.cmake
+          rm libexiv2/cmake/FindIconv.cmake
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
