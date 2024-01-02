@@ -11,6 +11,18 @@ jobs:
           repository: jim-easterbrook/python-exiv2
           ref: v0.16
 
+      - name: Fetch Gettext
+        run: >
+          c:\msys64\usr\bin\wget.exe -nv
+          https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-shared-64.zip
+          -O gettext.zip
+
+      - name: Extract Gettext
+        shell: bash
+        run: |
+          tar -xf gettext.zip
+          mv gettext0.21-iconv1.16-shared-64 gettext
+
       - name: Fetch Exiv2 source
         run: >
           c:\msys64\usr\bin\wget.exe -nv
@@ -22,28 +34,33 @@ jobs:
         run: |
           tar -xzf exiv2.tar.gz
           mv exiv2-0.27.7-Source libexiv2
+          # tweaks to allow NLS
+          cp conanfile_ex.py libexiv2
+          del libexiv2/cmake/FindIconv.cmake
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         env:
           CIBW_ARCHS: auto64
           CIBW_SKIP: pp3*
-          CIBW_ENVIRONMENT: EXIV2_ROOT=libexiv2/build-msvc/install
+          CIBW_ENVIRONMENT: |
+            EXIV2_ROOT=libexiv2/build-msvc/install
+            PATH="$PATH;$(pwd)\\gettext\\bin"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
             pip install conan==1.59.0 &&
             cd libexiv2 &&
-            conan install . -of build-msvc -if build-msvc -o unitTests=False
-            -o iconv=True -o webready=True -b missing &&
+            conan install conanfile_ex.py -of build-msvc -if build-msvc
+            -o unitTests=False -o iconv=True -o webready=True -b missing &&
             cmake -B build-msvc -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=build-msvc/install
             -DEXIV2_ENABLE_WIN_UNICODE=ON
             -DEXIV2_BUILD_SAMPLES=OFF
             -DEXIV2_BUILD_EXIV2_COMMAND=OFF
             -DEXIV2_ENABLE_BMFF=ON
-            -DEXIV2_ENABLE_NLS=OFF
+            -DEXIV2_ENABLE_NLS=ON
             -DEXIV2_ENABLE_VIDEO=ON
             -DEXIV2_ENABLE_WEBREADY=ON
             -DCMAKE_CXX_STANDARD=98
