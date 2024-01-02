@@ -36,8 +36,9 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.27.7-Source libexiv2
           # tweaks to allow NLS
-          cp conanfile_ex.py libexiv2
           rm libexiv2/cmake/FindIconv.cmake
+          echo -e "24a25\n>         self.requires('libgettext/0.21')"
+          patch libexiv2/conanfile.py
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
@@ -53,8 +54,8 @@ jobs:
           CIBW_BEFORE_ALL: >
             pip install conan==1.59.0 &&
             cd libexiv2 &&
-            conan install conanfile_ex.py -of build-msvc -if build-msvc
-            -o unitTests=False -o iconv=True -o webready=True -b missing &&
+            conan install . -of build-msvc -if build-msvc -o unitTests=False
+            -o iconv=True -o webready=True -b missing &&
             cmake -B build-msvc -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=build-msvc/install
             -DEXIV2_ENABLE_WIN_UNICODE=ON
