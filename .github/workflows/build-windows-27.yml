@@ -20,8 +20,9 @@ jobs:
       - name: Extract Gettext
         shell: bash
         run: |
-          unzip gettext.zip
-          mv gettext0.21-iconv1.16-shared-64 gettext
+          mkdir gettext
+          cd gettext
+          unzip ../gettext.zip
 
       - name: Fetch Exiv2 source
         run: >
