@@ -37,8 +37,8 @@ jobs:
           mv exiv2-0.27.7-Source libexiv2
           # tweaks to allow NLS
           rm libexiv2/cmake/FindIconv.cmake
-          echo -e "24a25\n>         self.requires('libgettext/0.21')"
-          c:\msys64\usr\bin\patch.exe libexiv2/conanfile.py
+          echo -e "24a25\n>         self.requires('libgettext/0.21')" |
+          c:/msys64/usr/bin/patch.exe libexiv2/conanfile.py
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
