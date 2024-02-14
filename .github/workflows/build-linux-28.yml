@@ -44,7 +44,7 @@ jobs:
             python3 -m exiv2 -v &&
             python3 -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
-            yum install -y zlib-devel expat-devel gettext-devel
+            yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
             libcurl-devel libssh-devel brotli-devel &&
             localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
             pip install ninja &&
