@@ -7,6 +7,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
+          ref: v0.16
 
       - name: Fetch Gettext
         run: >
