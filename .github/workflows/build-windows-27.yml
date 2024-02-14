@@ -50,8 +50,21 @@ jobs:
             PATH="$PATH;$(pwd)\\gettext\\bin"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
-            python -m unittest discover {project}/tests -v
-          CIBW_TEST_SKIP: cp36-*
+            python -m unittest -v {project}/tests/test_basicio.py &&
+            python -m unittest -v {project}/tests/test_datasets.py &&
+            python -m unittest -v {project}/tests/test_easyaccess.py &&
+            python -m unittest -v {project}/tests/test_error.py &&
+            python -m unittest -v {project}/tests/test_exif.py &&
+            python -m unittest -v {project}/tests/test_image.py &&
+            python -m unittest -v {project}/tests/test_iptc.py &&
+            python -m unittest -v {project}/tests/test_metadatum.py &&
+            python -m unittest -v {project}/tests/test_preview.py &&
+            python -m unittest -v {project}/tests/test_properties.py &&
+            python -m unittest -v {project}/tests/test_tags.py &&
+            python -m unittest -v {project}/tests/test_types.py &&
+            python -m unittest -v {project}/tests/test_value.py &&
+            python -m unittest -v {project}/tests/test_version.py &&
+            python -m unittest -v {project}/tests/test_xmp.py
           CIBW_BEFORE_ALL: >
             pip install conan==1.59.0 &&
             cd libexiv2 &&
