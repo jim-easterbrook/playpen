@@ -37,6 +37,7 @@ jobs:
             libcurl-devel libssh-devel brotli-devel &&
             localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
             pip install ninja &&
+            dnf update &&
             dnf install inih-devel.x86_64 &&
             cd libexiv2 &&
             cmake --preset linux-release
