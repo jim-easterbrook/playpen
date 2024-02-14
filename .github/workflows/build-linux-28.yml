@@ -19,12 +19,6 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.28.2 libexiv2
 
-#      - name: Download inih
-#        run: >
-#          wget -nv
-#          https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/#Packages/i/inih-58-1.el8.x86_64.rpm
-#          https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/#Packages/i/inih-devel-58-1.el8.x86_64.rpm
-
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         env:
