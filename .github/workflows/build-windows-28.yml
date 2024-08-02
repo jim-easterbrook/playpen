@@ -51,7 +51,7 @@ jobs:
         env:
           PATH: "$PATH;$(pwd)\\gettext\\bin"
         run: >
-          echo %PATH% &&
+          echo $PATH &&
           pip install conan==1.59.0 &&
           cd libexiv2 &&
           cmake --preset msvc
