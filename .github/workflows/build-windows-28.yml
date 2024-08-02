@@ -7,6 +7,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
 
       - name: Fetch Gettext
         run: >
@@ -51,7 +53,6 @@ jobs:
         env:
           PATH: "${{ github.workspace }}\\gettext\\bin"
         run: >
-          echo $env:Path &&
           pip install conan==1.59.0 &&
           cd libexiv2 &&
           cmake --preset msvc
@@ -64,7 +65,7 @@ jobs:
           -G "Visual Studio 16 2019" &&
           cmake --build build-msvc --config Release &&
           cmake --install build-msvc --config Release &&
-          copy build-msvc\bin\libcurl.dll build-msvc\install\bin
+          copy build-msvc\bin\libcurl.dll build-msvc\install\bin &&
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.5
