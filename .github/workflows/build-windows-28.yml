@@ -37,9 +37,9 @@ jobs:
           c:/msys64/usr/bin/patch.exe libexiv2/conanfile.py
 
       - name: Compile Exiv2
-        shell: bash
+        uses: actions/setup-python@v5
         env:
-          PATH: "$PATH;$(pwd)/gettext/bin"
+          PATH: "$PATH;$(pwd)\\gettext\\bin"
         run: |
             pip install conan==1.59.0
             cd libexiv2
@@ -53,7 +53,7 @@ jobs:
               -G "Visual Studio 16 2019"
             cmake --build build-msvc --config Release
             cmake --install build-msvc --config Release
-            cp build-msvc/bin/libcurl.dll build-msvc/install/bin
+            copy build-msvc\bin\libcurl.dll build-msvc\install\bin
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.5
