@@ -20,6 +20,7 @@ jobs:
           mkdir gettext
           cd gettext
           unzip ../gettext.zip
+          echo "$PWD/bin" >> $GITHUB_PATH
 
       - name: Fetch Exiv2 source
         run: >
@@ -49,7 +50,7 @@ jobs:
 
       - name: Compile Exiv2
         env:
-          PATH: "$PATH;$(pwd)\\gettext\\bin"
+          PATH: "$PATH;$PWD\\gettext\\bin"
         run: >
           echo $env:Path &&
           pip install conan==1.59.0 &&
