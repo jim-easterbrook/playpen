@@ -42,8 +42,9 @@ jobs:
           python-version: 3.11
 
       - name: Compile Exiv2
+        shell: bash
         env:
-          PATH: "$PATH;$(pwd)\\gettext\\bin"
+          PATH: "$PATH;$(pwd)/gettext/bin"
         run: |
             pip install conan==1.59.0
             cd libexiv2
@@ -57,7 +58,7 @@ jobs:
               -G "Visual Studio 16 2019"
             cmake --build build-msvc --config Release
             cmake --install build-msvc --config Release
-            copy build-msvc\bin\libcurl.dll build-msvc\install\bin
+            cp build-msvc/bin/libcurl.dll build-msvc/install/bin
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.5
