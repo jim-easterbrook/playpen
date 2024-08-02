@@ -47,11 +47,9 @@ jobs:
       - name: Install ninja
         uses: seanmiddleditch/gha-setup-ninja@master
 
-      - name: Set path
-        run: |
-          echo "${{ github.workspace }}\\gettext\\bin" >> $GITHUB_PATH
-
       - name: Compile Exiv2
+        env:
+          PATH: "${{ github.workspace }}\\gettext\\bin"
         run: >
           echo $env:Path &&
           pip install conan==1.59.0 &&
