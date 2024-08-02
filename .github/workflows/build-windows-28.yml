@@ -36,8 +36,10 @@ jobs:
           echo -e "24a25\n>         self.requires('libgettext/0.21')" |
           c:/msys64/usr/bin/patch.exe libexiv2/conanfile.py
 
-      - name: Compile Exiv2
+      - name: Install Python
         uses: actions/setup-python@v5
+
+      - name: Compile Exiv2
         env:
           PATH: "$PATH;$(pwd)\\gettext\\bin"
         run: |
