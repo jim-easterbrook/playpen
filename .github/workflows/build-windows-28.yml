@@ -9,6 +9,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: jim-easterbrook/python-exiv2
+          ref: devel
 
       - name: Fetch Gettext
         run: >
