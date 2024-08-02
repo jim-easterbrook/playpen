@@ -45,6 +45,9 @@ jobs:
       - name: Install cmake
         uses: jwlawson/actions-setup-cmake@v2
 
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
       - name: Compile Exiv2
         shell: bash
         run: |
