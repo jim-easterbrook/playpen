@@ -1,0 +1,14 @@
+name: Install Photini on MacOS
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: macos-13
+    steps:
+      - name: Do it
+        shell: bash
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install photini
+          ls -lR venv
