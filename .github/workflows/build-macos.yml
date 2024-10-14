@@ -29,6 +29,7 @@ jobs:
           CIBW_SKIP: pp3* cp36-* cp37-*
           CIBW_ENVIRONMENT: >
             GPHOTO2_ROOT=$PWD/libgphoto2/local_install
+            MACOSX_DEPLOYMENT_TARGET="13.0"
             SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
