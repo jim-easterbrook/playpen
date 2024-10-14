@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: jim-easterbrook/python-gphoto2
           ref: devel
@@ -31,17 +31,18 @@ jobs:
         uses: pypa/cibuildwheel@v2.16.2
         env:
           CIBW_ARCHS: auto64
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_BUILD: cp*-manylinux_x86_64
           CIBW_ENVIRONMENT: GPHOTO2_ROOT=$PWD/libgphoto2/local_install
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
-            yum install -y libusbx-devel libexif-devel libjpeg-turbo-devel \
-              gd-devel libcurl-devel libxml2-devel libtool-ltdl-devel &&
+            yum install -y libusbx-devel libexif-devel libjpeg-turbo-devel
+            gd-devel libcurl-devel libxml2-devel libtool-ltdl-devel &&
             pushd $PWD/libgphoto2 &&
-            ./configure --prefix=$PWD/local_install --disable-internal-docs \
-              --enable-vusb &&
+            ./configure --prefix=$PWD/local_install --disable-internal-docs
+            --enable-vusb &&
             make &&
             make install &&
             popd
