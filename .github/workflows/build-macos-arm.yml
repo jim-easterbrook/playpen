@@ -29,13 +29,13 @@ jobs:
           CIBW_SKIP: pp3*
           CIBW_ENVIRONMENT: >
             GPHOTO2_ROOT=$PWD/libgphoto2/local_install
-            MACOSX_DEPLOYMENT_TARGET="11.0"
+            MACOSX_DEPLOYMENT_TARGET="14.0"
             SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
-            brew install libexif jpeg-turbo libtool libusb gd gettext &&
+            brew install libexif libtool gd &&
             pushd $PWD/libgphoto2 &&
             ./configure --prefix=$PWD/local_install --disable-internal-docs \
                 --enable-vusb \
