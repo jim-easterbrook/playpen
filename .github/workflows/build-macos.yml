@@ -27,7 +27,9 @@ jobs:
         env:
           CIBW_ARCHS: x86_64
           CIBW_SKIP: pp3*
-          CIBW_ENVIRONMENT: GPHOTO2_ROOT=$PWD/libgphoto2/local_install
+          CIBW_ENVIRONMENT: >
+            GPHOTO2_ROOT=$PWD/libgphoto2/local_install
+            MACOSX_DEPLOYMENT_TARGET="10.15"
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
