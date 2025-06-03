@@ -33,6 +33,18 @@ jobs:
           tar -xzf inih.tar.gz
           mv inih-r58 inih
 
+      - name: Fetch libcurl rpm
+        run: >
+          wget -nv
+          https://cbs.centos.org/kojifiles/packages/curl/7.76.1/23.el9sopt_901/x86_64/libcurl-7.76.1-23.el9sopt_901.x86_64.rpm
+          -O libcurl.rpm
+
+      - name: Fetch libcurl-devel rpm
+        run: >
+          wget -nv
+          https://cbs.centos.org/kojifiles/packages/curl/7.76.1/23.el9sopt_901/x86_64/libcurl-devel-7.76.1-23.el9sopt_901.x86_64.rpm
+          -O libcurl-devel.rpm
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.23.3
         env:
@@ -44,9 +56,9 @@ jobs:
             python3 -m exiv2 -v &&
             python3 -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
-            yum update -y --nogpgcheck curl &&
+            yum localinstall libcurl.rpm libcurl-devel.rpm &&
             yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
-            libcurl-devel brotli-devel meson &&
+            brotli-devel meson &&
             localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
             pip install ninja &&
             cd inih && mkdir build && cd build &&
