@@ -4,7 +4,7 @@ on: workflow_dispatch
 jobs:
   build:
     name: build on ${{ matrix.os }}
-    runs-on: ubuntu-22.04-arm
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-22.04-arm]
@@ -27,7 +27,7 @@ jobs:
             --directory $PWD/libgphoto2 --strip-components=1
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.21.3
+        uses: pypa/cibuildwheel@v3.0.0
         env:
           CIBW_ARCHS: auto64
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
