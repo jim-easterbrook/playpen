@@ -50,5 +50,5 @@ jobs:
       - name: Store results
         uses: actions/upload-artifact@v4
         with:
-          name: linux-arm64-wheels
+          name: linux-wheels-${{ matrix.os }}
           path: wheelhouse/*.whl
