@@ -51,7 +51,7 @@ jobs:
         env:
           CIBW_ARCHS: auto64
           CIBW_BUILD: "cp38*"
-          CIBW_SKIP: "*muslinux*"
+          CIBW_SKIP: "*musllinux*"
           CIBW_ENVIRONMENT_LINUX: >
             GPHOTO2_ROOT=$PWD/libgphoto2/local_install
           CIBW_ENVIRONMENT_MACOS: >
