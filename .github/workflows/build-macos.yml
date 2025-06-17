@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   build:
-    name: build on ${{ runner.os }} ${{ runner.arch }}
+    name: build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
