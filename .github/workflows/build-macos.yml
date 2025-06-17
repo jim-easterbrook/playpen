@@ -54,8 +54,8 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS: auto64
-          CIBW_BUILD: cp38*
-          CIBW_SKIP: *muslinux*
+          CIBW_BUILD: "cp38*"
+          CIBW_SKIP: "*muslinux*"
           CIBW_ENVIRONMENT: >
             GPHOTO2_ROOT=$GPHOTO_DIR/local_install ${{ matrix.options }}
           CIBW_TEST_COMMAND: >
