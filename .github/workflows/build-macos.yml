@@ -15,6 +15,7 @@ jobs:
             target: "14.0"
     env:
       GPHOTO_DIR: ${{ github.workspace }}/libgphoto2
+      GPHOTO_VSN: 2.5.31
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -24,7 +25,7 @@ jobs:
 
       - name: Download libgphoto2
         run: wget -nv
-          https://github.com/gphoto/libgphoto2/releases/download/v2.5.31/libgphoto2-2.5.31.tar.xz
+          https://github.com/gphoto/libgphoto2/releases/download/v${GPHOTO_VSN}/libgphoto2-${GPHOTO_VSN}.tar.xz
           -O libgphoto2.tar.xz
 
       - name: Extract libgphoto2
@@ -51,9 +52,8 @@ jobs:
         env:
           CIBW_ARCHS: auto64
           CIBW_BUILD: cp38*-macosx*
-          CIBW_ENVIRONMENT: >
-            GPHOTO2_ROOT=$GPHOTO_DIR/local_install
           CIBW_ENVIRONMENT_MACOS: >
+            GPHOTO2_ROOT=$GPHOTO_DIR/local_install
             MACOSX_DEPLOYMENT_TARGET=${{ matrix.target }}
             SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
