@@ -59,15 +59,14 @@ jobs:
           CIBW_ENVIRONMENT: >
             GPHOTO2_ROOT=$GPHOTO_DIR/local_install
             ${{ matrix.options }}
-          CIBW_ENVIRONMENT_PASS_LINUX: GPHOTO_DIR
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL_LINUX: >
             yum install -y libusbx-devel libexif-devel libjpeg-turbo-devel
             gd-devel libcurl-devel libxml2-devel libtool-ltdl-devel &&
-            pushd $GPHOTO_DIR &&
-            ./configure --prefix=$PWD/local_install --disable-internal-docs
+            pushd $PWD/libgphoto2 &&
+            ./configure --prefix=$PWD/libgphoto2/local_install --disable-internal-docs
             --enable-vusb &&
             make &&
             make install &&
