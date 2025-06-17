@@ -1,9 +1,13 @@
-name: build gphoto2 macOS x86_64
+name: build gphoto2 macOS
 on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: macos-13
+    name: build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-13, macos-14]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -23,13 +27,13 @@ jobs:
             --directory $PWD/libgphoto2 --strip-components=1
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.21.3
+        # cibuildwheel@v3.x omits Python 3.6 & 3.7
+        uses: pypa/cibuildwheel@v2.23.3
         env:
-          CIBW_ARCHS: x86_64
-          CIBW_SKIP: pp3*
+          CIBW_ARCHS: auto64
+          CIBW_BUILD: cp38*-macosx*
           CIBW_ENVIRONMENT: >
             GPHOTO2_ROOT=$PWD/libgphoto2/local_install
-            MACOSX_DEPLOYMENT_TARGET="13.0"
             SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
@@ -47,5 +51,5 @@ jobs:
       - name: Store results
         uses: actions/upload-artifact@v4
         with:
-          name: macos-wheels
+          name: macos-wheels-${{ matrix.os }}
           path: wheelhouse/*.whl
