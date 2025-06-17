@@ -13,6 +13,8 @@ jobs:
             target: "13.0"
           - os: macos-14
             target: "14.0"
+    env:
+      GPHOTO_DIR: ${{ runner.temp }}/libgphoto2
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -27,16 +29,16 @@ jobs:
 
       - name: Extract libgphoto2
         run: |
-          mkdir $PWD/libgphoto2
+          mkdir $GPHOTO_DIR
           tar xf libgphoto2.tar.xz \
-            --directory $PWD/libgphoto2 --strip-components=1
+            --directory $GPHOTO_DIR --strip-components=1
 
       - name: Install dependencies
         run: brew install libexif libtool gd
 
       - name: Build libgphoto2
         run: |
-          cd $PWD/libgphoto2
+          cd $GPHOTO_DIR
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
             --enable-vusb \
             CFLAGS="-D_DARWIN_C_SOURCE -I$(brew --prefix)/include"
@@ -49,7 +51,8 @@ jobs:
         env:
           CIBW_ARCHS: auto64
           CIBW_BUILD: cp38*-macosx*
-          CIBW_ENVIRONMENT: GPHOTO2_ROOT=$PWD/libgphoto2/local_install
+          CIBW_ENVIRONMENT: >
+            GPHOTO2_ROOT=$GPHOTO_DIR/local_install
           CIBW_ENVIRONMENT_MACOS: >
             MACOSX_DEPLOYMENT_TARGET=${{ matrix.target }}
             SYSTEM_VERSION_COMPAT=0
