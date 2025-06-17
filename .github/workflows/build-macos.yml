@@ -7,12 +7,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-13, macos-14]
+        os: [ubuntu-22.04, macos-13, macos-14]
         include:
           - os: macos-13
-            target: "13.0"
+            options: >
+              MACOSX_DEPLOYMENT_TARGET=13.0
+              SYSTEM_VERSION_COMPAT=0
           - os: macos-14
-            target: "14.0"
+            options: >
+              MACOSX_DEPLOYMENT_TARGET=14.0
+              SYSTEM_VERSION_COMPAT=0
     env:
       GPHOTO_DIR: ${{ github.workspace }}/libgphoto2
       GPHOTO_VSN: 2.5.31
@@ -35,9 +39,11 @@ jobs:
             --directory $GPHOTO_DIR --strip-components=1
 
       - name: Install dependencies
+        if: ${{ runner.os }} == macOS
         run: brew install libexif libtool gd
 
       - name: Build libgphoto2
+        if: ${{ runner.os }} == macOS
         run: |
           cd $GPHOTO_DIR
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
@@ -51,14 +57,22 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS: auto64
-          CIBW_BUILD: cp38*-macosx*
-          CIBW_ENVIRONMENT_MACOS: >
-            GPHOTO2_ROOT=$GPHOTO_DIR/local_install
-            MACOSX_DEPLOYMENT_TARGET=${{ matrix.target }}
-            SYSTEM_VERSION_COMPAT=0
+          CIBW_BUILD: cp38*
+          CIBW_SKIP: *muslinux*
+          CIBW_ENVIRONMENT: >
+            GPHOTO2_ROOT=$GPHOTO_DIR/local_install ${{ matrix.options }}
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
+          CIBW_BEFORE_ALL_LINUX: >
+            yum install -y libusbx-devel libexif-devel libjpeg-turbo-devel
+            gd-devel libcurl-devel libxml2-devel libtool-ltdl-devel &&
+            pushd $GPHOTO_DIR &&
+            ./configure --prefix=$PWD/local_install --disable-internal-docs
+            --enable-vusb &&
+            make &&
+            make install &&
+            popd
 
       - name: Store results
         uses: actions/upload-artifact@v4
