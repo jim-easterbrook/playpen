@@ -39,7 +39,7 @@ jobs:
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
-            brew install libexif &&
+            brew install libexif libtool gd &&
             pushd $PWD/libgphoto2 &&
             ./configure --prefix=$PWD/local_install --disable-internal-docs \
                 --enable-vusb \
