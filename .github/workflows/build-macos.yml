@@ -9,8 +9,8 @@ jobs:
       matrix:
         os: [macos-13, macos-14]
     env:
-      GPHOTO2_DIR: $PWD/libgphoto2
-      GPHOTO2_ROOT: $GPHOTO2_DIR/local_install
+      GPHOTO2_DIR: ${PWD}/libgphoto2
+      GPHOTO2_ROOT: ${GPHOTO2_DIR}/local_install
       MACOSX_DEPLOYMENT_TARGET: \
         fromJSON('["13.0", "14.0"]')[${{ matrix.os }} == 'macos-14']
       SYSTEM_VERSION_COMPAT: 0
