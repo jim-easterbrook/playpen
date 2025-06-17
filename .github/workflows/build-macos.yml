@@ -50,7 +50,7 @@ jobs:
           CIBW_BUILD: cp38*-macosx*
           CIBW_ENVIRONMENT: GPHOTO2_ROOT=$PWD/libgphoto2/local_install
           CIBW_ENVIRONMENT_MACOS: >
-            MACOSX_DEPLOYMENT_TARGET=$CIBW_MACOSX_DEPLOYMENT_TARGET
+            MACOSX_DEPLOYMENT_TARGET=${{ matrix.os.env.CIBW_MACOSX_DEPLOYMENT_TARGET }}
             SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
