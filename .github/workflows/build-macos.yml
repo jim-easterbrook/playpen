@@ -35,9 +35,9 @@ jobs:
         env:
           CIBW_ARCHS: auto64
           CIBW_BUILD: cp38*-macosx*
-          CIBW_ENVIRONMENT: >
+          CIBW_ENVIRONMENT:
             GPHOTO2_ROOT=$PWD/libgphoto2/local_install
-          CIBW_ENVIRONMENT_MACOS: >
+          CIBW_ENVIRONMENT_MACOS:
             SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
