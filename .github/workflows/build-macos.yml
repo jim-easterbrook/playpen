@@ -8,6 +8,12 @@ jobs:
     strategy:
       matrix:
         os: [macos-13, macos-14]
+    env:
+      GPHOTO2_DIR: $PWD/libgphoto2
+      GPHOTO2_ROOT: $GPHOTO2_DIR/local_install
+      MACOSX_DEPLOYMENT_TARGET: \
+        fromJSON('["13.0", "14.0"]')[${{ matrix.os }} == 'macos-14']
+      SYSTEM_VERSION_COMPAT: 0
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -24,7 +30,7 @@ jobs:
         run: |
           mkdir $PWD/libgphoto2
           tar xf libgphoto2.tar.xz \
-            --directory $PWD/libgphoto2 --strip-components=1
+            --directory $GPHOTO2_DIR --strip-components=1
 
       - name: Build wheels
         # cibuildwheel@v3.x omits Python 3.6 & 3.7
@@ -32,16 +38,12 @@ jobs:
         env:
           CIBW_ARCHS: auto64
           CIBW_BUILD: cp38*-macosx*
-          CIBW_ENVIRONMENT: >
-            GPHOTO2_ROOT=$PWD/libgphoto2/local_install
-            MACOSX_DEPLOYMENT_TARGET=fromJSON('["13.0", "14.0"]')[${{ matrix.os }} == 'macos-14']
-            SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL: >
             brew install libexif libtool gd &&
-            pushd $PWD/libgphoto2 &&
+            pushd $GPHOTO2_DIR &&
             ./configure --prefix=$PWD/local_install --disable-internal-docs \
                 --enable-vusb \
                 CFLAGS="-D_DARWIN_C_SOURCE -I$(brew --prefix)/include" &&
