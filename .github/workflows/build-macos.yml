@@ -57,7 +57,9 @@ jobs:
           CIBW_BUILD: "cp38*"
           CIBW_SKIP: "*muslinux*"
           CIBW_ENVIRONMENT: >
-            GPHOTO2_ROOT=$GPHOTO_DIR/local_install ${{ matrix.options }}
+            GPHOTO2_ROOT=$GPHOTO_DIR/local_install
+            ${{ matrix.options }}
+          CIBW_ENVIRONMENT_PASS_LINUX: GPHOTO_DIR
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
             python3 -m unittest discover {project}/tests -v
