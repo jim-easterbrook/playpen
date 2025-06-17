@@ -39,18 +39,18 @@ jobs:
             --directory $GPHOTO_DIR --strip-components=1
 
       - name: Install dependencies
-        if: ${{ runner.os }} == macOS
-        run: brew install libexif libtool gd
+        - if: ${{ runner.os }} == macOS
+          run: brew install libexif libtool gd
 
       - name: Build libgphoto2
-        if: ${{ runner.os }} == macOS
-        run: |
-          cd $GPHOTO_DIR
-          ./configure --prefix=$PWD/local_install --disable-internal-docs \
-            --enable-vusb \
-            CFLAGS="-D_DARWIN_C_SOURCE -I$(brew --prefix)/include"
-          make
-          make install
+        - if: ${{ runner.os }} == macOS
+          run: |
+            cd $GPHOTO_DIR
+            ./configure --prefix=$PWD/local_install --disable-internal-docs \
+              --enable-vusb \
+              CFLAGS="-D_DARWIN_C_SOURCE -I$(brew --prefix)/include"
+            make
+            make install
 
       - name: Build wheels
         # cibuildwheel@v3.x omits Python 3.6 & 3.7
