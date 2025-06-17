@@ -13,9 +13,10 @@ jobs:
             target: "13.0"
           - os: macos-14
             target: "14.0"
-    env:
-      GPHOTO_DIR: ${{ runner.temp }}/libgphoto2
     steps:
+      env:
+        GPHOTO_DIR: ${{ runner.temp }}/libgphoto2
+
       - name: Check out repository code
         uses: actions/checkout@v4
         with:
