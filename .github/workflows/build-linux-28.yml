@@ -78,7 +78,9 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         run: |
           pip install "conan<2.0"
-          conan install zlib brotli inih
+          conan install zlib/1.2.13
+          conan install brotli/1.0.9
+          conan install inih/55
 
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
