@@ -91,7 +91,7 @@ jobs:
         env:
           PATH: "${{ github.workspace }}\\gettext\\bin"
         run: >
-          pip install conan &&
+          pip install "conan<2.0" &&
           cd libexiv2 &&
           conan profile detect &&
           cmake --preset msvc $EXIV2_OPTIONS
