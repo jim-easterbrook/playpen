@@ -49,6 +49,15 @@ jobs:
           c:/msys64/usr/bin/wget.exe -nv $EXIV2_SRC -O - |
           tar zxf - --directory libexiv2 --strip-components=1
 
+      - name: Download inih
+        if: ${{ runner.os == 'Linux' }}
+        env:
+          SRC: https://github.com/benhoyt/inih/archive/r58/inih-r58.tar.gz
+        run: >
+          mkdir inih &&
+          wget -nv $SRC -O - |
+          tar zxf - --directory inih --strip-components=1
+
       - name: Download gettext
         if: ${{ runner.os == 'Windows' }}
         env:
@@ -60,20 +69,6 @@ jobs:
           c:/msys64/usr/bin/wget.exe -nv $SRC -O gettext.zip
           unzip gettext.zip
           echo "${{ github.workspace }}\\gettext\\bin" >> "$GITHUB_PATH"
-
-      - name: Show path
-        if: ${{ runner.os == 'Windows' }}
-        shell: bash
-        run: echo "$PATH"
-
-      - name: Download inih
-        if: ${{ runner.os == 'Linux' }}
-        env:
-          SRC: https://github.com/benhoyt/inih/archive/r58/inih-r58.tar.gz
-        run: >
-          mkdir inih &&
-          wget -nv $SRC -O - |
-          tar zxf - --directory inih --strip-components=1
 
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
@@ -111,7 +106,7 @@ jobs:
           CIBW_ENVIRONMENT_MACOS: >
             EXIV2_ROOT=libexiv2/build-base_mac/install
           CIBW_ENVIRONMENT_WINDOWS: >
-            EXIV2_ROOT=libexiv2/build-msvc/install
+            EXIV2_ROOT=libexiv2/build-win-release/install
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
           CIBW_BUILD: "cp38*"
           CIBW_SKIP: "*musllinux*"
