@@ -7,18 +7,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019]
-#        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-13, macos-14, windows-2019]
+        os:
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
+          - macos-13
+          - macos-14
+          - windows-2019
         include:
           - wget: wget
+          - os: macos-13
+            arch: x86_64
+            target: 13.0
+          - os: macos-14
+            arch: arm64
+            target: 14.0
           - os: windows-2019
             wget: c:/msys64/usr/bin/wget.exe
-#          - os: macos-13
-#            arch: x86_64
-#            target: 13.0
-#          - os: macos-14
-#            arch: arm64
-#            target: 14.0
     env:
       EXIV2_SRC: >
         https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.5.tar.gz
@@ -30,6 +34,9 @@ jobs:
         -D EXIV2_ENABLE_NLS=ON
         -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -37,16 +44,7 @@ jobs:
           repository: jim-easterbrook/python-exiv2
           ref: devel
 
-      - name: Download exiv2 (not Windows)
-        if: ${{ runner.os != 'Windows' }}
-        run: >
-          mkdir libexiv2 &&
-          ${{ matrix.wget }} -nv $EXIV2_SRC -O - |
-          tar zxf - --directory libexiv2 --strip-components=1
-
-      - name: Download exiv2 (Windows)
-        if: ${{ runner.os == 'Windows' }}
-        shell: bash
+      - name: Download exiv2
         run: |
           mkdir libexiv2
           ${{ matrix.wget }} -nv $EXIV2_SRC -O - |
@@ -56,8 +54,8 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
         env:
           SRC: https://github.com/benhoyt/inih/archive/r58/inih-r58.tar.gz
-        run: >
-          mkdir inih &&
+        run: |
+          mkdir inih
           wget -nv $SRC -O - |
           tar zxf - --directory inih --strip-components=1
 
@@ -65,7 +63,6 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         env:
           SRC: https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-shared-64.zip
-        shell: bash
         run: |
           mkdir gettext
           cd gettext
@@ -75,7 +72,6 @@ jobs:
 
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
-        shell: bash
         run: >
           pip install conan==1.59.0 &&
           cd libexiv2 &&
