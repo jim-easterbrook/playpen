@@ -46,11 +46,8 @@ jobs:
         shell: bash
         run: |
           mkdir libexiv2
-          c:/msys64/usr/bin/wget.exe -nv $EXIV2_SRC -O - |
+          wget -nv $EXIV2_SRC -O - |
           tar zxf - --directory libexiv2 --strip-components=1
-          # tweaks to allow NLS
-          echo -e "24a25\n>         self.requires('libgettext/0.21')" |
-          patch libexiv2/conanfile.py
 
       - name: Download gettext
         if: ${{ runner.os == 'Windows' }}
@@ -79,11 +76,13 @@ jobs:
         run: >
           pip install conan==1.59.0 &&
           cd libexiv2 &&
+          echo -e "24a25\n>         self.requires('libgettext/0.21')" |
+          patch libexiv2/conanfile.py &&
           cmake --preset win-release $EXIV2_OPTIONS
           -G "Visual Studio 16 2019" &&
           cmake --build build-win-release --config Release &&
           cmake --install build-win-release --config Release &&
-          cp build-win-release\bin\libcurl.dll build-win-release\install\bin
+          cp build-win-release/bin/libcurl.dll build-win-release/install/bin
 
       - name: Build exiv2 (macOS)
         if: ${{ runner.os == 'macOS' }}
