@@ -76,15 +76,14 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
 #        env:
 #          PATH: "${{ github.workspace }}\\gettext\\bin;${PATH}"
-        run: >
+        run: |
           echo "$PATH"
-          pip install "conan<2.0" &&
-          cd libexiv2 &&
-          cmake --preset msvc $EXIV2_OPTIONS
-          -D CMAKE_BUILD_TYPE=Release
-          -G "Visual Studio 17 2022" &&
-          cmake --build build-msvc --config Release &&
-          cmake --install build-msvc --config Release &&
+          pip install "conan<2.0"
+          cd libexiv2
+          cmake --preset msvc $EXIV2_OPTIONS -D CMAKE_BUILD_TYPE=Release \
+            -G "Visual Studio 17 2022"
+          cmake --build build-msvc --config Release
+          cmake --install build-msvc --config Release
           copy build-msvc\bin\libcurl.dll build-msvc\install\bin
 
       - name: Build exiv2 (macOS)
