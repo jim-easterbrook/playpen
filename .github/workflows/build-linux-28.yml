@@ -25,7 +25,7 @@ jobs:
         -D EXIV2_BUILD_SAMPLES=OFF
         -D EXIV2_BUILD_UNIT_TESTS=OFF
         -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
-        -D EXIV2_ENABLE_NLS=OFF
+        -D EXIV2_ENABLE_NLS=ON
         -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     steps:
@@ -74,15 +74,21 @@ jobs:
           wget -nv $SRC -O - |
           tar zxf - --directory inih --strip-components=1
 
+      - name: Install dependencies (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        run: >
+          pip install "conan<2.0"
+
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
-        run: |
-          pip install "conan<2.0"
-          cd libexiv2
-          cmake --preset msvc $EXIV2_OPTIONS -D CMAKE_BUILD_TYPE=Release -G "Visual Studio 17 2022"
-          cmake --build build-msvc --config Release
-          cmake --install build-msvc --config Release
-          copy build-msvc\bin\libcurl.dll build-msvc\install\bin
+        run: >
+          cd libexiv2 &&
+          cmake --preset win-release $EXIV2_OPTIONS
+          -G "Visual Studio 17 2022" &&
+          cmake --build build-win-release --config Release &&
+          cmake --install build-win-release --config Release &&
+          copy build-win-release\bin\libcurl.dll
+          build-win-release\install\bin &&
 
       - name: Build exiv2 (macOS)
         if: ${{ runner.os == 'macOS' }}
