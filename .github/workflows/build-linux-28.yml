@@ -7,18 +7,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [ubuntu-22.04, windows-2019]
 #        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-13, macos-14, windows-2019]
-#        include:
-#          - os: macos-13
-#            arch: x86_64
-#            target: 13.0
+        include:
+          - os: macos-13
+            arch: x86_64
+            target: 13.0
 #          - os: macos-14
 #            arch: arm64
 #            target: 14.0
     env:
       EXIV2_SRC: >
         https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.5.tar.gz
+      EXIV2_OPTIONS: >
+        -D EXIV2_BUILD_EXIV2_COMMAND=OFF
+        -D EXIV2_BUILD_SAMPLES=OFF
+        -D EXIV2_BUILD_UNIT_TESTS=OFF
+        -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
+        -D EXIV2_ENABLE_NLS=ON
+        -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     steps:
       - name: Check out repository code
@@ -86,13 +93,8 @@ jobs:
         run: >
           pip install conan==1.59.0 &&
           cd libexiv2 &&
-          cmake --preset msvc
+          cmake --preset msvc $EXIV2_OPTIONS
           -D CMAKE_BUILD_TYPE=Release
-          -D EXIV2_BUILD_SAMPLES=OFF
-          -D EXIV2_BUILD_EXIV2_COMMAND=OFF
-          -D EXIV2_BUILD_UNIT_TESTS=OFF
-          -D EXIV2_ENABLE_NLS=ON
-          -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
           -G "Visual Studio 16 2019" &&
           cmake --build build-msvc --config Release &&
           cmake --install build-msvc --config Release &&
@@ -103,14 +105,8 @@ jobs:
         run: >
           brew install inih &&
           cd libexiv2 &&
-          cmake --preset base_mac
-          -D CMAKE_OSX_ARCHITECTURES=${{ matrix.arch }}
-          -D EXIV2_BUILD_SAMPLES=OFF
-          -D EXIV2_BUILD_UNIT_TESTS=OFF
-          -D EXIV2_ENABLE_NLS=ON
-          -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
-          -D EXIV2_BUILD_EXIV2_COMMAND=OFF
-          -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF &&
+          cmake --preset base_mac $EXIV2_OPTIONS
+          -D CMAKE_OSX_ARCHITECTURES=${{ matrix.arch }} &&
           cmake --build build-base_mac --config Release &&
           cmake --install build-base_mac --config Release
 
@@ -141,14 +137,8 @@ jobs:
             meson setup --prefix=/usr --buildtype=release .. &&
             ninja && ninja install &&
             cd ../../libexiv2 &&
-            cmake --preset linux-release
-            -D CONAN_AUTO_INSTALL=OFF
-            -D EXIV2_BUILD_SAMPLES=OFF
-            -D EXIV2_BUILD_UNIT_TESTS=OFF
-            -D EXIV2_ENABLE_NLS=ON
-            -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
-            -D EXIV2_BUILD_EXIV2_COMMAND=OFF
-            -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF &&
+            cmake --preset linux-release $EXIV2_OPTIONS
+            -D CONAN_AUTO_INSTALL=OFF &&
             cmake --build build-linux-release --config Release &&
             cmake --install build-linux-release --config Release
 
