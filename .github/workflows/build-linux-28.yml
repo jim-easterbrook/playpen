@@ -61,6 +61,11 @@ jobs:
           unzip gettext.zip
           echo "${{ github.workspace }}\\gettext\\bin" >> "$GITHUB_PATH"
 
+      - name: Show path
+        if: ${{ runner.os == 'Windows' }}
+        shell: bash
+        run: echo "$PATH"
+
       - name: Download inih
         if: ${{ runner.os == 'Linux' }}
         env:
