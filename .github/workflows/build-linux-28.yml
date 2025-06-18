@@ -82,7 +82,7 @@ jobs:
           pip install conan==1.59.0 &&
           cd libexiv2 &&
           echo -e "24a25\n>         self.requires('libgettext/0.21')" |
-          patch libexiv2/conanfile.py &&
+          patch conanfile.py &&
           cmake --preset win-release $EXIV2_OPTIONS
           -G "Visual Studio 16 2019" &&
           cmake --build build-win-release --config Release &&
