@@ -20,6 +20,7 @@ jobs:
       EXIV2_SRC: >
         https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.5.tar.gz
       EXIV2_OPTIONS: >
+        -D CONAN_AUTO_INSTALL=OFF
         -D EXIV2_BUILD_EXIV2_COMMAND=OFF
         -D EXIV2_BUILD_SAMPLES=OFF
         -D EXIV2_BUILD_UNIT_TESTS=OFF
@@ -121,8 +122,7 @@ jobs:
             meson setup --prefix=/usr --buildtype=release .. &&
             ninja && ninja install &&
             cd ../../libexiv2 &&
-            cmake --preset linux-release $EXIV2_OPTIONS
-            -D CONAN_AUTO_INSTALL=OFF &&
+            cmake --preset linux-release $EXIV2_OPTIONS &&
             cmake --build build-linux-release --config Release &&
             cmake --install build-linux-release --config Release
 
