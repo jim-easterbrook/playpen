@@ -93,6 +93,7 @@ jobs:
         run: >
           pip install conan &&
           cd libexiv2 &&
+          conan profile detect &&
           cmake --preset msvc $EXIV2_OPTIONS
           -D CMAKE_BUILD_TYPE=Release
           -G "Visual Studio 17 2022" &&
