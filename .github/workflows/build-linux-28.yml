@@ -50,7 +50,7 @@ jobs:
           tar zxf - --directory libexiv2 --strip-components=1
           # tweaks to allow NLS
           echo -e "24a25\n>         self.requires('libgettext/0.21')" |
-          c:/msys64/usr/bin/patch.exe libexiv2/conanfile.py
+          patch libexiv2/conanfile.py
 
       - name: Download gettext
         if: ${{ runner.os == 'Windows' }}
