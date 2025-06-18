@@ -80,7 +80,7 @@ jobs:
           pip install conan==1.59.0 &&
           cd libexiv2 &&
           cmake --preset win-release $EXIV2_OPTIONS
-          -G "Visual Studio 17 2022" &&
+          -G "Visual Studio 16 2019" &&
           cmake --build build-win-release --config Release &&
           cmake --install build-win-release --config Release &&
           cp build-win-release\bin\libcurl.dll build-win-release\install\bin
