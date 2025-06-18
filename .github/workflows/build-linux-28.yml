@@ -69,9 +69,9 @@ jobs:
 #        with:
 #          python-version: 3.11
 
-      - name: Install cmake
-        if: ${{ runner.os == 'Windows' }}
-        uses: jwlawson/actions-setup-cmake@v2
+#      - name: Install cmake
+#        if: ${{ runner.os == 'Windows' }}
+#        uses: jwlawson/actions-setup-cmake@v2
 
 #      - name: Install ninja
 #        if: ${{ runner.os == 'Windows' }}
@@ -91,7 +91,7 @@ jobs:
         env:
           PATH: "${{ github.workspace }}\\gettext\\bin"
         run: >
-          pip3 install "conan<2.0" &&
+          python3 -m pip install "conan<2.0" &&
           cd libexiv2 &&
           cmake --preset msvc $EXIV2_OPTIONS
           -D CMAKE_BUILD_TYPE=Release
