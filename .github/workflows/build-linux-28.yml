@@ -1,9 +1,19 @@
-name: Build Linux wheels exiv2 0.28
+name: Build python-exiv2 wheels
 on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-22.04-arm]
+#        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-13, macos-14]
+#        include:
+#          - os: macos-13
+#            target: 13.0
+#          - os: macos-14
+#            target: 14.0
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -11,54 +21,39 @@ jobs:
           repository: jim-easterbrook/python-exiv2
           ref: devel
 
-      - name: Fetch Exiv2 source
+      - name: Download exiv2
+        env:
+          SRC: >
+            https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.5.tar.gz
         run: >
-          wget -nv
-          https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.5.tar.gz
-          -O exiv2.tar.gz
-
-      - name: Extract Exiv2 source
-        run: |
-          tar -xzf exiv2.tar.gz
-          mv exiv2-0.28.5 libexiv2
+          mkdir libexiv2 &&
+          wget -nv $SRC -O - |
+          tar zxf - --directory libexiv2 --strip-components=1
 
       - name: Download inih
+        env:
+          SRC: https://github.com/benhoyt/inih/archive/r58/inih-r58.tar.gz
         run: >
-          wget -nv
-          https://github.com/benhoyt/inih/archive/r58/inih-r58.tar.gz
-          -O inih.tar.gz
-
-      - name: Extract inih source
-        run: |
-          tar -xzf inih.tar.gz
-          mv inih-r58 inih
-
-      - name: Fetch libcurl rpm
-        run: >
-          wget -nv
-          https://cbs.centos.org/kojifiles/packages/curl/7.76.1/23.el9sopt_901/x86_64/libcurl-7.76.1-23.el9sopt_901.x86_64.rpm
-          -O libcurl.rpm
-
-      - name: Fetch libcurl-devel rpm
-        run: >
-          wget -nv
-          https://cbs.centos.org/kojifiles/packages/curl/7.76.1/23.el9sopt_901/x86_64/libcurl-devel-7.76.1-23.el9sopt_901.x86_64.rpm
-          -O libcurl-devel.rpm
+          mkdir inih &&
+          wget -nv $SRC -O - |
+          tar zxf - --directory inih --strip-components=1
 
       - name: Build wheels
+        # cibuildwheel@v3.x omits Python 3.6 & 3.7
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS: auto64
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ENVIRONMENT: EXIV2_ROOT=libexiv2/build-linux-release/install
-          CIBW_BUILD: cp*-manylinux_x86_64
+          CIBW_BUILD: "cp38*"
+          CIBW_SKIP: "*musllinux*"
           CIBW_TEST_COMMAND: >
             python3 -m exiv2 -v &&
             python3 -m unittest discover {project}/tests -v
-          CIBW_BEFORE_ALL: >
-            yum localinstall libcurl.rpm libcurl-devel.rpm &&
+          CIBW_BEFORE_ALL_LINUX: >
             yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
-            brotli-devel meson &&
+            libcurl-devel brotli-devel meson &&
             localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
             pip install ninja &&
             cd inih && mkdir build && cd build &&
@@ -79,5 +74,5 @@ jobs:
       - name: Store results
         uses: actions/upload-artifact@v4
         with:
-          name: linux-28-wheels
+          name: exiv2-wheels-${{ runner.os }}-${{ runner.arch }}
           path: wheelhouse/*.whl
