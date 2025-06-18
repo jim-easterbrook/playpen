@@ -63,20 +63,6 @@ jobs:
           c:/msys64/usr/bin/wget.exe -nv $SRC -O gettext.zip
           unzip gettext.zip
 
-#      - name: Install Python
-#        if: ${{ runner.os == 'Windows' }}
-#        uses: actions/setup-python@v5
-#        with:
-#          python-version: 3.11
-
-#      - name: Install cmake
-#        if: ${{ runner.os == 'Windows' }}
-#        uses: jwlawson/actions-setup-cmake@v2
-
-#      - name: Install ninja
-#        if: ${{ runner.os == 'Windows' }}
-#        uses: seanmiddleditch/gha-setup-ninja@master
-
       - name: Download inih
         if: ${{ runner.os == 'Linux' }}
         env:
@@ -88,8 +74,8 @@ jobs:
 
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
-#        env:
-#          PATH: "${{ github.workspace }}\\gettext\\bin"
+        env:
+          PATH: "${{ github.workspace }}\\gettext\\bin;${PATH}"
         run: >
           pip install "conan<2.0" &&
           cd libexiv2 &&
