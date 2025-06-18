@@ -130,8 +130,8 @@ jobs:
           CIBW_BUILD: "cp38*"
           CIBW_SKIP: "*musllinux*"
           CIBW_TEST_COMMAND: >
-            python3 -m exiv2 -v &&
-            python3 -m unittest discover {project}/tests -v
+            python -m exiv2 -v &&
+            python -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL_LINUX: >
             yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
             libcurl-devel brotli-devel meson &&
