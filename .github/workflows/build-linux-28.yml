@@ -24,7 +24,7 @@ jobs:
         -D EXIV2_BUILD_SAMPLES=OFF
         -D EXIV2_BUILD_UNIT_TESTS=OFF
         -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
-        -D EXIV2_ENABLE_NLS=ON
+        -D EXIV2_ENABLE_NLS=OFF
         -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     steps:
@@ -74,9 +74,10 @@ jobs:
 
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
-        env:
-          PATH: "${{ github.workspace }}\\gettext\\bin;${PATH}"
+#        env:
+#          PATH: "${{ github.workspace }}\\gettext\\bin;${PATH}"
         run: >
+          echo "$PATH"
           pip install "conan<2.0" &&
           cd libexiv2 &&
           cmake --preset msvc $EXIV2_OPTIONS
