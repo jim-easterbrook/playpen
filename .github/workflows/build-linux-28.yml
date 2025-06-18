@@ -41,7 +41,7 @@ jobs:
           wget -nv $EXIV2_SRC -O - |
           tar zxf - --directory libexiv2 --strip-components=1
 
-      - name: Download exiv2 (windows)
+      - name: Download exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
         shell: bash
         run: |
@@ -95,7 +95,7 @@ jobs:
           cd libexiv2 &&
           cmake --preset msvc $EXIV2_OPTIONS
           -D CMAKE_BUILD_TYPE=Release
-          -G "Visual Studio 16 2019" &&
+          -G "Visual Studio 17 2022" &&
           cmake --build build-msvc --config Release &&
           cmake --install build-msvc --config Release &&
           copy build-msvc\bin\libcurl.dll build-msvc\install\bin
