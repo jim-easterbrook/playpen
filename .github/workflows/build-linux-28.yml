@@ -9,11 +9,13 @@ jobs:
       matrix:
         os: [macos-13]
 #        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-13, macos-14]
-#        include:
-#          - os: macos-13
-#            target: 13.0
+        include:
+          - os: macos-13
+            target: 10.15
 #          - os: macos-14
 #            target: 14.0
+    env:
+      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -39,10 +41,10 @@ jobs:
           wget -nv $SRC -O - |
           tar zxf - --directory inih --strip-components=1
 
-      - name: Build libgphoto2
+      - name: Build exiv2
         if: ${{ runner.os == 'macOS' }}
         run: >
-          brew install ninja inih &&
+          brew install inih &&
           cd libexiv2 &&
           cmake --preset base_mac
           -D EXIV2_BUILD_SAMPLES=OFF
@@ -65,7 +67,6 @@ jobs:
             EXIV2_ROOT=libexiv2/build-linux-release/install
           CIBW_ENVIRONMENT_MACOS: >
             EXIV2_ROOT=libexiv2/build-base_mac/install
-            MACOSX_DEPLOYMENT_TARGET="10.15"
           CIBW_BUILD: "cp38*"
           CIBW_SKIP: "*musllinux*"
           CIBW_TEST_COMMAND: >
