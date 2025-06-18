@@ -9,7 +9,10 @@ jobs:
       matrix:
         os: [windows-2019]
 #        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-13, macos-14, windows-2019]
-#        include:
+        include:
+          - wget: wget
+          - os: windows-2019
+            wget: c:/msys64/usr/bin/wget.exe
 #          - os: macos-13
 #            arch: x86_64
 #            target: 13.0
@@ -38,7 +41,7 @@ jobs:
         if: ${{ runner.os != 'Windows' }}
         run: >
           mkdir libexiv2 &&
-          wget -nv $EXIV2_SRC -O - |
+          ${{ matrix.wget }} -nv $EXIV2_SRC -O - |
           tar zxf - --directory libexiv2 --strip-components=1
 
       - name: Download exiv2 (Windows)
@@ -46,7 +49,7 @@ jobs:
         shell: bash
         run: |
           mkdir libexiv2
-          c:/msys64/usr/bin/wget.exe -nv $EXIV2_SRC -O - |
+          ${{ matrix.wget }} -nv $EXIV2_SRC -O - |
           tar zxf - --directory libexiv2 --strip-components=1
 
       - name: Download inih
