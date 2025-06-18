@@ -27,16 +27,20 @@ jobs:
           repository: jim-easterbrook/python-exiv2
           ref: devel
 
-      - name: Download exiv2
+      - name: Download exiv2 (not Windows)
+        if: ${{ runner.os != 'Windows' }}
         run: >
           mkdir libexiv2 &&
           wget -nv $EXIV2_SRC -O - |
           tar zxf - --directory libexiv2 --strip-components=1
 
-      - name: Patch exiv2
+      - name: Download exiv2 (windows)
         if: ${{ runner.os == 'Windows' }}
         shell: bash
         run: |
+          mkdir libexiv2
+          c:\msys64\usr\bin\wget.exe -nv $EXIV2_SRC -O - |
+          tar zxf - --directory libexiv2 --strip-components=1
           # tweaks to allow NLS
           echo -e "24a25\n>         self.requires('libgettext/0.21')" |
           c:/msys64/usr/bin/patch.exe libexiv2/conanfile.py
@@ -46,9 +50,9 @@ jobs:
         env:
           SRC: https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-shared-64.zip
         shell: bash
-        run: >
-          mkdir gettext &&
-          cd gettext &&
+        run: |
+          mkdir gettext
+          cd gettext
           c:\msys64\usr\bin\wget.exe -nv $SRC -O - |
           unzip -
 
