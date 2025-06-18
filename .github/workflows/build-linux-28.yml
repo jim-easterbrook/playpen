@@ -11,8 +11,10 @@ jobs:
 #        os: [ubuntu-22.04, ubuntu-22.04-arm, macos-13, macos-14]
         include:
           - os: macos-13
+            arch: x86_64
             target: 13.0
           - os: macos-14
+            arch: arm64
             target: 14.0
     env:
       EXIV2_SRC: >
@@ -46,6 +48,7 @@ jobs:
           brew install inih &&
           cd libexiv2 &&
           cmake --preset base_mac
+          -D CMAKE_OSX_ARCHITECTURES=${{ matrix.arch }}
           -D EXIV2_BUILD_SAMPLES=OFF
           -D EXIV2_BUILD_UNIT_TESTS=OFF
           -D EXIV2_ENABLE_NLS=ON
