@@ -54,7 +54,7 @@ jobs:
           mkdir gettext
           cd gettext
           c:/msys64/usr/bin/wget.exe -nv $SRC -O - |
-          unzip
+          unzip -p -
 
       - name: Install Python
         if: ${{ runner.os == 'Windows' }}
