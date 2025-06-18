@@ -123,6 +123,7 @@ jobs:
             EXIV2_ROOT=libexiv2/build-base_mac/install
           CIBW_ENVIRONMENT_WINDOWS: >
             EXIV2_ROOT=libexiv2/build-msvc/install
+          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
           CIBW_BUILD: "cp38*"
           CIBW_SKIP: "*musllinux*"
           CIBW_TEST_COMMAND: >
