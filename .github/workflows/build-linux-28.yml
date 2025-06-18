@@ -88,10 +88,10 @@ jobs:
 
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
-        env:
-          PATH: "${{ github.workspace }}\\gettext\\bin"
+#        env:
+#          PATH: "${{ github.workspace }}\\gettext\\bin"
         run: >
-          python3 -m pip install "conan<2.0" &&
+          pip install "conan<2.0" &&
           cd libexiv2 &&
           cmake --preset msvc $EXIV2_OPTIONS
           -D CMAKE_BUILD_TYPE=Release
