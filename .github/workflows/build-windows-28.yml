@@ -36,10 +36,10 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.28.6 libexiv2
 
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11
+      # - name: Install Python
+        # uses: actions/setup-python@v5
+        # with:
+          # python-version: 3.11
 
       - name: Install cmake
         uses: lukka/get-cmake@latest
