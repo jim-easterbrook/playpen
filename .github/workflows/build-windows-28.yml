@@ -50,12 +50,12 @@ jobs:
       - name: Install dependencies
         run: |
           pip install conan==1.59.0
-          conan install --build=missing --output-folder=libexiv2\build-msvc zlib/1.2.13@
+          conan install --build=missing zlib/1.2.13@
 
       - name: Compile Exiv2
         run: >
           cd libexiv2 &&
-          cmake --preset msvc
+          cmake --preset msvc --preset conan-default
           -D CMAKE_BUILD_TYPE=Release
           -D CONAN_AUTO_INSTALL=OFF
           -D EXIV2_BUILD_SAMPLES=OFF
