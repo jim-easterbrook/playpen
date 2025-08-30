@@ -12,8 +12,7 @@ jobs:
           ref: 0.17.4
 
       - name: Fetch Exiv2 (compiled)
-        shell: bash
-        run: wget -nv
+        run: c:\msys64\usr\bin\wget.exe -nv
           https://exiv2.org/builds/exiv2-0.28.6-2022msvc.zip
           -O exiv2.zip
 
