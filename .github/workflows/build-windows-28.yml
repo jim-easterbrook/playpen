@@ -47,6 +47,11 @@ jobs:
       # - name: Install ninja
         # uses: seanmiddleditch/gha-setup-ninja@master
 
+      - name: Install dependencies
+        run: |
+          pip install conan==1.59.0
+          conan install zlib/1.2.13@conan/stable
+
       - name: Compile Exiv2
         env:
           PATH: "${{ github.workspace }}\\gettext\\bin"
