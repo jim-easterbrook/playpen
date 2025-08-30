@@ -27,7 +27,7 @@ jobs:
       - name: Fetch Exiv2 source
         run: >
           c:\msys64\usr\bin\wget.exe -nv
-          https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.5.tar.gz
+          https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.6.tar.gz
           -O exiv2.tar.gz
 
       - name: Extract Exiv2 source
@@ -50,8 +50,8 @@ jobs:
       - name: Compile Exiv2
         env:
           PATH: "${{ github.workspace }}\\gettext\\bin"
+        shell: bash
         run: >
-          pip install conan==1.59.0 &&
           cd libexiv2 &&
           cmake --preset msvc
           -D CMAKE_BUILD_TYPE=Release
