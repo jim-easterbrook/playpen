@@ -50,7 +50,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install conan==1.59.0
-          conan install zlib/1.2.13@conan/stable
+          conan install zlib/1.2.13@
 
       - name: Compile Exiv2
         env:
