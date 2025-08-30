@@ -51,7 +51,7 @@ jobs:
         run: |
           pip install conan==1.59.0
           conan profile detect --force
-          conan install --build=missing --output-folder=libexiv2 -g CMakeDeps -g CMakeToolchain zlib/1.2.13@
+          conan install --build=missing --output-folder=libexiv2\build-msvc -g CMakeDeps -g CMakeToolchain zlib/1.2.13@
 
       - name: Compile Exiv2
         run: >
