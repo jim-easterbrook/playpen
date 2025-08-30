@@ -44,6 +44,8 @@ jobs:
       - name: Install cmake
         # uses: jwlawson/actions-setup-cmake@v2
         uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: "3.31.6"
 
       # - name: Install ninja
         # uses: seanmiddleditch/gha-setup-ninja@master
