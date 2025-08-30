@@ -58,7 +58,6 @@ jobs:
       - name: Compile Exiv2
         env:
           PATH: "${{ github.workspace }}\\gettext\\bin"
-        shell: bash
         run: >
           cd libexiv2 &&
           cmake --preset msvc
