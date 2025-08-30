@@ -7,6 +7,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
+          ref: 0.17.4
 
       - name: Fetch Gettext
         run: >
@@ -32,9 +35,8 @@ jobs:
         run: |
           tar -xzf exiv2.tar.gz
           mv exiv2-0.28.6 libexiv2
-          # tweaks to allow NLS
-          echo -e "24a25\n>         self.requires('libgettext/0.21')" |
-          patch libexiv2/conanfile.py
+          # copy our version of conanfile.py
+          cp conanfile.py libexiv2/
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -55,7 +57,6 @@ jobs:
           cd libexiv2 &&
           cmake --preset msvc
           -D CMAKE_BUILD_TYPE=Release
-          -D CMAKE_POLICY_VERSION_MINIMUM=3.5
           -D EXIV2_BUILD_SAMPLES=OFF
           -D EXIV2_BUILD_EXIV2_COMMAND=OFF
           -D EXIV2_BUILD_UNIT_TESTS=OFF
