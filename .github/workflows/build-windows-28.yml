@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           tar -xzf exiv2.tar.gz
-          mv exiv2-0.28.5 libexiv2
+          mv exiv2-0.28.6 libexiv2
 
       - name: Install Python
         uses: actions/setup-python@v5
