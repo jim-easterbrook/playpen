@@ -42,7 +42,8 @@ jobs:
           python-version: 3.11
 
       - name: Install cmake
-        uses: jwlawson/actions-setup-cmake@v2
+        # uses: jwlawson/actions-setup-cmake@v2
+        uses: lukka/get-cmake@latest
 
       # - name: Install ninja
         # uses: seanmiddleditch/gha-setup-ninja@master
