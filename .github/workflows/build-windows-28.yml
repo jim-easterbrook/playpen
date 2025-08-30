@@ -41,24 +41,16 @@ jobs:
         with:
           python-version: 3.11
 
-      - name: Install cmake
-        # uses: jwlawson/actions-setup-cmake@v2
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: "3.31.6"
-
-      # - name: Install ninja
-        # uses: seanmiddleditch/gha-setup-ninja@master
-
-      - name: Install dependencies
-        run: |
-          pip install conan==1.59.0
-          conan install --build=missing zlib/1.2.13@
-
       - name: Compile Exiv2
         env:
           PATH: "${{ github.workspace }}\\gettext\\bin"
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: "3.31.6"
+          ninjaVersion: "1.13.1"
         run: >
+          pip install conan==1.59.0 &&
+          conan install --build=missing zlib/1.2.13@ &&
           cd libexiv2 &&
           cmake --preset msvc
           -D CMAKE_BUILD_TYPE=Release
