@@ -15,12 +15,12 @@ jobs:
           - windows-2022
         include:
           - wget: wget
-          - os: macos-13
-            arch: x86_64
-            target: 13.0
-          - os: macos-14
-            arch: arm64
-            target: 14.0
+          # - os: macos-13
+          #   arch: x86_64
+          #   target: 13.0
+          # - os: macos-14
+          #   arch: arm64
+          #   target: 14.0
           - os: windows-2022
             wget: c:/msys64/usr/bin/wget.exe
     env:
@@ -40,6 +40,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
+          ref: 0.17.5
 
       - name: Download exiv2
         run: |
