@@ -36,8 +36,8 @@ jobs:
           tar -xzf exiv2.tar.gz
           mv exiv2-0.28.7 libexiv2
           # tweaks to allow NLS
-          echo -e "24a25\n>         self.requires('libgettext/0.21')" |
-          c:/msys64/usr/bin/patch.exe libexiv2/conanfile.py
+          # echo -e "24a25\n>         self.requires('libgettext/0.21')" |
+          # c:/msys64/usr/bin/patch.exe libexiv2/conanfile.py
 
       - name: Install Python
         uses: actions/setup-python@v5
