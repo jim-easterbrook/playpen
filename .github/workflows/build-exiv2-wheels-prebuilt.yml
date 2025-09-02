@@ -8,17 +8,19 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-22.04
-          # - ubuntu-22.04-arm
+          # - ubuntu-22.04
+          - ubuntu-22.04-arm
           # - macos-13
           # - macos-14
           # - windows-2022
         include:
           - exiv2_vsn: 0.28.7
+          - ext: tar.gz
           - wget: wget
-          - os: ubuntu-22.04
-            arch: x86_64
-            download: Linux-x86_64.tar.gz
+          # - os: ubuntu-22.04
+          #   arch: x86_64
+          - os: ubuntu-22.04-arm
+            arch: aarch64
           # - os: macos-13
           #   arch: x86_64
           #   target: 13.0
@@ -40,7 +42,7 @@ jobs:
 
       - name: Download exiv2
         run: |
-          ${{ matrix.wget }} -nv https://github.com/Exiv2/exiv2/releases/download/v${{ matrix.exiv2_vsn }}/exiv2-${{ matrix.exiv2_vsn }}-${{ matrix.download }} -O - |
+          ${{ matrix.wget }} -nv https://github.com/Exiv2/exiv2/releases/download/v${{ matrix.exiv2_vsn }}/exiv2-${{ matrix.exiv2_vsn }}${{ runner.os }}-${{ matrix.arch }}.${{ ext }} -O - |
           tar zxf -
 
       - name: Build wheels
@@ -53,7 +55,7 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_BUILD: "cp*"
-          CIBW_SKIP: "*musllinux* cp314-*"
+          CIBW_SKIP: "*musllinux* cp314*"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
