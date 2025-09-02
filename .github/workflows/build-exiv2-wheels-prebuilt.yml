@@ -16,6 +16,7 @@ jobs:
         include:
           - wget: wget
           - os: ubuntu-22.04
+            arch: x86_64
             download: Linux-x86_64.tar.gz
           # - os: macos-13
           #   arch: x86_64
@@ -28,6 +29,7 @@ jobs:
           #   wget: c:/msys64/usr/bin/wget.exe
     env:
       EXIV2_VSN: 0.28.7
+      EXIV2_ROOT: exiv2-$EXIV2_VSN-${{ runner.os }}-${{ matrix.arch }}
     defaults:
       run:
         shell: bash
@@ -40,25 +42,19 @@ jobs:
 
       - name: Download exiv2
         run: |
-          mkdir libexiv2
           ${{ matrix.wget }} -nv https://github.com/Exiv2/exiv2/releases/download/v$EXIV2_VSN/exiv2-$EXIV2_VSN-${{ matrix.download }} -O - |
-          tar zxf - --directory libexiv2 --strip-components=1
+          tar zxf -
 
       - name: Build wheels
         # cibuildwheel@v3.x omits Python 3.6 & 3.7
         uses: pypa/cibuildwheel@v3.1.4
         env:
           CIBW_ARCHS: auto64
+          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_ROOT
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
-          CIBW_ENVIRONMENT_LINUX: >
-            EXIV2_ROOT=libexiv2
-          CIBW_ENVIRONMENT_MACOS: >
-            EXIV2_ROOT=libexiv2/build-base_mac/install
-          CIBW_ENVIRONMENT_WINDOWS: >
-            EXIV2_ROOT=libexiv2/build-win-release/install
           CIBW_BUILD: "cp*"
-          CIBW_SKIP: "*musllinux*"
+          CIBW_SKIP: ["*musllinux*", "cp314-*"]
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
