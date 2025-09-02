@@ -29,7 +29,6 @@ jobs:
           #   wget: c:/msys64/usr/bin/wget.exe
     env:
       EXIV2_VSN: 0.28.7
-      EXIV2_ROOT: exiv2-$EXIV2_VSN-${{ runner.os }}-${{ matrix.arch }}
     defaults:
       run:
         shell: bash
@@ -50,7 +49,8 @@ jobs:
         uses: pypa/cibuildwheel@v3.1.4
         env:
           CIBW_ARCHS: auto64
-          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_ROOT
+          CIBW_ENVIRONMENT: >
+            EXIV2_ROOT=exiv2-$EXIV2_VSN-${{ runner.os }}-${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_BUILD: "cp*"
