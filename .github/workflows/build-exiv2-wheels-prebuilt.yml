@@ -23,7 +23,7 @@ jobs:
           #   arch: Linux-aarch64
           - os: macos-13
             arch: Darwin-x86_64
-            target: 13.0
+            target: 13.7
           # - os: macos-14
           #   arch: Darwin-arm64
           #   target: 14.0
