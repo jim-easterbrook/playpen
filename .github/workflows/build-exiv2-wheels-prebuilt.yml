@@ -10,8 +10,8 @@ jobs:
         os:
           # - ubuntu-22.04
           # - ubuntu-22.04-arm
-          - macos-13
-          # - macos-14
+          # - macos-13
+          - macos-14
           # - windows-2022
         include:
           - exiv2_vsn: 0.28.7
@@ -21,12 +21,12 @@ jobs:
           #   arch: Linux-x86_64
           # - os: ubuntu-22.04-arm
           #   arch: Linux-aarch64
-          - os: macos-13
-            arch: Darwin-x86_64
-            target: 13.7
-          # - os: macos-14
-          #   arch: Darwin-arm64
-          #   target: 14.0
+          # - os: macos-13
+          #   arch: Darwin-x86_64
+          #   target: 13.7
+          - os: macos-14
+            arch: Darwin-arm64
+            target: 14.0
           # - os: windows-2022
             # download: 2022msvc.zip
           #   wget: c:/msys64/usr/bin/wget.exe
