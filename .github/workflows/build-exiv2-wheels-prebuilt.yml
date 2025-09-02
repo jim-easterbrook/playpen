@@ -42,7 +42,7 @@ jobs:
 
       - name: Download exiv2
         run: |
-          ${{ matrix.wget }} -nv https://github.com/Exiv2/exiv2/releases/download/v${{ matrix.exiv2_vsn }}/exiv2-${{ matrix.exiv2_vsn }}-${{ runner.os }}-${{ matrix.arch }}.${{ ext }} -O - |
+          ${{ matrix.wget }} -nv https://github.com/Exiv2/exiv2/releases/download/v${{ matrix.exiv2_vsn }}/exiv2-${{ matrix.exiv2_vsn }}-${{ runner.os }}-${{ matrix.arch }}.${{ matrix.ext }} -O - |
           tar zxf -
 
       - name: Build wheels
