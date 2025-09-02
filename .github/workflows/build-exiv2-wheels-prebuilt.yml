@@ -53,13 +53,12 @@ jobs:
           CIBW_ENVIRONMENT: >
             EXIV2_ROOT=exiv2-${{ matrix.exiv2_vsn }}-${{ runner.os }}-${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
-          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_31
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_34
           CIBW_BUILD: "cp*"
           CIBW_SKIP: "*musllinux* cp314*"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
-          CIBW_TEST_SKIP: cp36-macosx_x86_64 cp37-macosx_x86_64
 
       - name: Store results
         uses: actions/upload-artifact@v4
