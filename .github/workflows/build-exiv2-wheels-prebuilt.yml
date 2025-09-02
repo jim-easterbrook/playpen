@@ -9,8 +9,8 @@ jobs:
       matrix:
         os:
           # - ubuntu-22.04
-          - ubuntu-22.04-arm
-          # - macos-13
+          # - ubuntu-22.04-arm
+          - macos-13
           # - macos-14
           # - windows-2022
         include:
@@ -19,10 +19,10 @@ jobs:
           - wget: wget
           # - os: ubuntu-22.04
           #   arch: x86_64
-          - os: ubuntu-22.04-arm
-            arch: aarch64
-          # - os: macos-13
-          #   arch: x86_64
+          # - os: ubuntu-22.04-arm
+          #   arch: aarch64
+          - os: macos-13
+            arch: x86_64
           #   target: 13.0
           # - os: macos-14
           #   arch: arm64
