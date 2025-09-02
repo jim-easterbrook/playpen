@@ -49,7 +49,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_ARCHS: auto64
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ENVIRONMENT_LINUX: >
             EXIV2_ROOT=libexiv2
