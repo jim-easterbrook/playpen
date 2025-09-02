@@ -12,7 +12,7 @@ jobs:
           - ubuntu-22.04-arm
           - macos-13
           - macos-14
-          # - windows-2022
+          - windows-2022
         include:
           - wget: wget
           - os: macos-13
@@ -21,8 +21,8 @@ jobs:
           - os: macos-14
             arch: arm64
             target: 14.0
-          # - os: windows-2022
-          #   wget: c:/msys64/usr/bin/wget.exe
+          - os: windows-2022
+            wget: c:/msys64/usr/bin/wget.exe
     env:
       EXIV2_SRC: >
         https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.7.tar.gz

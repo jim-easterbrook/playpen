@@ -1,0 +1,71 @@
+name: Build python-exiv2 wheels (prebuilt libexiv2)
+on: workflow_dispatch
+
+jobs:
+  build:
+    name: build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+          # - ubuntu-22.04-arm
+          # - macos-13
+          # - macos-14
+          # - windows-2022
+        include:
+          - wget: wget
+          - os: ubuntu-22.04
+            download: Linux-x86_64.tar.gz
+          # - os: macos-13
+          #   arch: x86_64
+          #   target: 13.0
+          # - os: macos-14
+          #   arch: arm64
+          #   target: 14.0
+          # - os: windows-2022
+            # download: 2022msvc.zip
+          #   wget: c:/msys64/usr/bin/wget.exe
+    env:
+      EXIV2_VSN: 0.28.7
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          repository: jim-easterbrook/python-exiv2
+          ref: devel
+
+      - name: Download exiv2
+        run: |
+          mkdir libexiv2
+          ${{ matrix.wget }} -nv https://github.com/Exiv2/exiv2/releases/download/v$EXIV2_VSN/exiv2-$EXIV2_VSN-${{ matrix.download }} -O - |
+          tar zxf - --directory libexiv2 --strip-components=1
+
+      - name: Build wheels
+        # cibuildwheel@v3.x omits Python 3.6 & 3.7
+        uses: pypa/cibuildwheel@v2.23.3
+        env:
+          CIBW_ARCHS: auto64
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
+          CIBW_ENVIRONMENT_LINUX: >
+            EXIV2_ROOT=libexiv2
+          CIBW_ENVIRONMENT_MACOS: >
+            EXIV2_ROOT=libexiv2/build-base_mac/install
+          CIBW_ENVIRONMENT_WINDOWS: >
+            EXIV2_ROOT=libexiv2/build-win-release/install
+          CIBW_BUILD: "cp*"
+          CIBW_SKIP: "*musllinux*"
+          CIBW_TEST_COMMAND: >
+            python -m exiv2 -v &&
+            python -m unittest discover {project}/tests -v
+          CIBW_TEST_SKIP: cp36-macosx_x86_64 cp37-macosx_x86_64
+
+      - name: Store results
+        uses: actions/upload-artifact@v4
+        with:
+          name: exiv2-wheels-${{ runner.os }}-${{ runner.arch }}
+          path: wheelhouse/*.whl
