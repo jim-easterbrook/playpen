@@ -41,13 +41,13 @@ jobs:
       - name: Download exiv2.tar.gz
         if: ${{ runner.os != 'Windows' }}
         run: |
-          wget -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.exiv2_vsn }}/exiv2-${{ env.exiv2_vsn }}-${{ matrix.arch }}.tar.gz -O - |
+          wget -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.EXIV2_VSN }}/exiv2-${{ env.EXIV2_VSN }}-${{ matrix.arch }}.tar.gz -O - |
           tar zxf -
 
       - name: Download exiv2.zip
         if: ${{ runner.os == 'Windows' }}
         run: |
-          c:/msys64/usr/bin/wget.exe -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.exiv2_vsn }}/exiv2-${{ env.exiv2_vsn }}-${{ matrix.arch }}.zip -O exiv2.zip
+          c:/msys64/usr/bin/wget.exe -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.EXIV2_VSN }}/exiv2-${{ env.EXIV2_VSN }}-${{ matrix.arch }}.zip -O exiv2.zip
           unzip exiv2.zip
 
       - name: Build wheels
@@ -56,7 +56,7 @@ jobs:
         env:
           CIBW_ARCHS: auto64
           CIBW_ENVIRONMENT: >
-            EXIV2_ROOT=exiv2-${{ env.exiv2_vsn }}-${{ matrix.arch }}
+            EXIV2_ROOT=exiv2-${{ env.EXIV2_VSN }}-${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_34
           CIBW_BUILD: "cp*"
