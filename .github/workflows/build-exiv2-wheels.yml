@@ -94,6 +94,7 @@ jobs:
           cmake --install build-base_mac --config Release
 
       - name: Build wheels (Python 3.6, 3.7)
+        if: ${{ matrix.os != 'macos-14' }}
         # cibuildwheel@v3.x omits Python 3.6 & 3.7
         uses: pypa/cibuildwheel@v2.23.3
         env:
