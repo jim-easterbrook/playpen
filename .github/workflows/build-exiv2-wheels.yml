@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: jim-easterbrook/python-exiv2
-          ref: devel
+          ref: 0.17.5
 
       - name: Download exiv2
         run: |
