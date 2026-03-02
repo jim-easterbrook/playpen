@@ -3,29 +3,33 @@ on: workflow_dispatch
 
 jobs:
   build:
-    name: build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: build ${{ matrix.build }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        os:
-          - ubuntu-22.04
-          - ubuntu-22.04-arm
-          - macos-14-large
-          - macos-14
-          - windows-2022
         include:
-          - os: ubuntu-22.04
+          - build: Linux-x64
+            runner: ubuntu-22.04
             arch: Linux-x86_64
-          - os: ubuntu-22.04-arm
+            archs: x86_64
+          - build: Linux-arm64
+            runner: ubuntu-22.04-arm
             arch: Linux-aarch64
-          - os: macos-14-large
+            archs: aarch64
+          - build: MacOS-x64
+            runner: macos-14
             arch: Darwin-x86_64
-            target: 13.7
-          - os: macos-14
+            target: 14.0
+            archs: x86_64
+          - build: MacOS-arm64
+            runner: macos-14
             arch: Darwin-arm64
             target: 14.0
-          - os: windows-2022
+            archs: arm64
+          - build: Windows-x64
+            runner: windows-2022
             arch: 2022msvc-AMD64
+            archs: AMD64
     defaults:
       run:
         shell: bash
@@ -54,7 +58,7 @@ jobs:
         # cibuildwheel@v3.x omits Python 3.6 & 3.7
         uses: pypa/cibuildwheel@v3.1.4
         env:
-          CIBW_ARCHS: auto64
+          CIBW_ARCHS: ${{ matrix.archs }}
           CIBW_ENVIRONMENT: >
             EXIV2_ROOT=exiv2-${{ env.EXIV2_VSN }}-${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
@@ -70,5 +74,5 @@ jobs:
       - name: Store results
         uses: actions/upload-artifact@v4
         with:
-          name: exiv2-wheels-${{ runner.os }}-${{ runner.arch }}
+          name: exiv2-wheels-${{ matrix.build }}
           path: wheelhouse/*.whl
