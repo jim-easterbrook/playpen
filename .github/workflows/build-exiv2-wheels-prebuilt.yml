@@ -17,7 +17,7 @@ jobs:
             exiv2_build: Linux-aarch64
             arch: aarch64
           - build: MacOS-x64
-            runner: macos-14
+            runner: macos-15-intel
             exiv2_build: Darwin-x86_64
             target: 14.0
             arch: x86_64
@@ -65,8 +65,7 @@ jobs:
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_34
           CIBW_BUILD: "cp*"
           CIBW_SKIP: "*musllinux*"
-          CIBW_BEFORE_ALL_MACOS: >
-            arch -${{ matrix.arch }} brew install inih brotli gettext
+          CIBW_BEFORE_ALL_MACOS: brew install inih
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
