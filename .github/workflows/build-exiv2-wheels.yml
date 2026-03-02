@@ -80,7 +80,7 @@ jobs:
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
         run: >
-          pip install conan==1.59.0 &&
+          pip install conan==1.66.0 &&
           cd libexiv2 &&
           echo -e "24a25\n>         self.requires('libgettext/0.21')" |
           patch conanfile.py &&
