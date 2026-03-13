@@ -33,8 +33,7 @@ jobs:
             wget: c:/msys64/usr/bin/wget.exe
     env:
       GPHOTO_DIR: ${{ github.workspace }}/libgphoto2
-      GPHOTO_SRC: >
-        https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
+      GPHOTO_SRC: https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     steps:
       - name: Check out repository code
