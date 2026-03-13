@@ -44,7 +44,7 @@ jobs:
 
       - name: Download libgphoto2
         run: ${{ matrix.wget }} -nv
-          https://github.com/gphoto/libgphoto2/releases/download/v${GPHOTO_VSN}/libgphoto2-${GPHOTO_VSN}.tar.xz
+          https://github.com/gphoto/libgphoto2/releases/download/v$GPHOTO_VSN/libgphoto2-$GPHOTO_VSN.tar.xz
           -O libgphoto2.tar.xz
 
       - name: Extract libgphoto2
