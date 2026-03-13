@@ -50,7 +50,7 @@ jobs:
         run: |
           mkdir $GPHOTO_DIR
           ${{ matrix.wget }} -nv $GPHOTO_SRC -O - |
-          tar xf - --directory $GPHOTO_DIR --strip-components=1
+          tar --xz xf - --directory $GPHOTO_DIR --strip-components=1
 
       - name: Build libgphoto2
         if: ${{ runner.os == 'macOS' }}
