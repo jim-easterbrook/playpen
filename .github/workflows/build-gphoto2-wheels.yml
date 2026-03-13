@@ -11,21 +11,26 @@ jobs:
           - build: Linux-x64
             runner: ubuntu-22.04
             arch: x86_64
+            wget: wget
           - build: Linux-arm64
             runner: ubuntu-22.04-arm
             arch: aarch64
+            wget: wget
           - build: MacOS-x64
             runner: macos-15-intel
             target: 13.0
             arch: x86_64
+            wget: wget
           - build: MacOS-arm64
             runner: macos-14
             dependencies: libtool gd
             target: 14.0
             arch: arm64
+            wget: wget
           - build: Windows-x64
             runner: windows-2022
             arch: AMD64
+            wget: c:/msys64/usr/bin/wget.exe
     env:
       GPHOTO_DIR: ${{ github.workspace }}/libgphoto2
       GPHOTO_VSN: 2.5.33
@@ -38,7 +43,7 @@ jobs:
           ref: devel
 
       - name: Download libgphoto2
-        run: wget -nv
+        run: ${{ matrix.wget }} -nv
           https://github.com/gphoto/libgphoto2/releases/download/v${GPHOTO_VSN}/libgphoto2-${GPHOTO_VSN}.tar.xz
           -O libgphoto2.tar.xz
 
