@@ -33,7 +33,6 @@ jobs:
             wget: c:/msys64/usr/bin/wget.exe
     env:
       GPHOTO_SRC: https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
-      GPHOTO2_ROOT: libgphoto2/local_install
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     steps:
       - name: Check out repository code
@@ -69,6 +68,7 @@ jobs:
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_BUILD: "cp36* cp37*"
           CIBW_SKIP: "*musllinux*"
+          CIBW_ENVIRONMENT: GPHOTO2_ROOT=libgphoto2/local_install
           CIBW_ENVIRONMENT_MACOS: SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
@@ -90,6 +90,7 @@ jobs:
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_BUILD: "cp*"
           CIBW_SKIP: "*musllinux*"
+          CIBW_ENVIRONMENT: GPHOTO2_ROOT=libgphoto2/local_install
           CIBW_ENVIRONMENT_MACOS: SYSTEM_VERSION_COMPAT=0
           CIBW_TEST_COMMAND: >
             python3 -m gphoto2 -v &&
