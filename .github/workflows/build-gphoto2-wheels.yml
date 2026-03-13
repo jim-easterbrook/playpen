@@ -36,9 +36,6 @@ jobs:
       GPHOTO_SRC: >
         https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
