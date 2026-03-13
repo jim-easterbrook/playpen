@@ -36,6 +36,9 @@ jobs:
       GPHOTO_SRC: >
         https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -44,13 +47,10 @@ jobs:
           ref: devel
 
       - name: Download libgphoto2
-        run: ${{ matrix.wget }} -nv $GPHOTO_SRC -O libgphoto2.tar.xz
-
-      - name: Extract libgphoto2
         run: |
           mkdir $GPHOTO_DIR
-          tar xf libgphoto2.tar.xz \
-            --directory $GPHOTO_DIR --strip-components=1
+          ${{ matrix.wget }} -nv $GPHOTO_SRC -O - |
+          tar zxf - --directory $GPHOTO_DIR --strip-components=1
 
       - name: Build libgphoto2
         if: ${{ runner.os == 'macOS' }}
