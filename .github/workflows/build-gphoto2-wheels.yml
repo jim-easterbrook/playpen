@@ -33,7 +33,8 @@ jobs:
             wget: c:/msys64/usr/bin/wget.exe
     env:
       GPHOTO_DIR: ${{ github.workspace }}/libgphoto2
-      GPHOTO_VSN: 2.5.33
+      GPHOTO_SRC: >
+        https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     steps:
       - name: Check out repository code
@@ -43,9 +44,6 @@ jobs:
           ref: devel
 
       - name: Download libgphoto2
-        env:
-          GPHOTO_SRC: >
-            https://github.com/gphoto/libgphoto2/releases/download/v$GPHOTO_VSN/libgphoto2-$GPHOTO_VSN.tar.xz
         run: ${{ matrix.wget }} -nv $GPHOTO_SRC -O libgphoto2.tar.xz
 
       - name: Extract libgphoto2
