@@ -11,26 +11,18 @@ jobs:
           - build: Linux-x64
             runner: ubuntu-22.04
             arch: x86_64
-            wget: wget
           - build: Linux-arm64
             runner: ubuntu-22.04-arm
             arch: aarch64
-            wget: wget
           - build: MacOS-x64
             runner: macos-15-intel
             target: 13.0
             arch: x86_64
-            wget: wget
           - build: MacOS-arm64
             runner: macos-14
             dependencies: libtool gd
             target: 14.0
             arch: arm64
-            wget: wget
-          - build: Windows-x64
-            runner: windows-2022
-            arch: AMD64
-            wget: c:/msys64/usr/bin/wget.exe
     env:
       GPHOTO_SRC: https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
@@ -44,10 +36,10 @@ jobs:
       - name: Download libgphoto2
         run: |
           mkdir libgphoto2
-          ${{ matrix.wget }} -nv ${{ env.GPHOTO_SRC }} -O - |
+          wget -nv ${{ env.GPHOTO_SRC }} -O - |
           tar --xz -x -f - --directory libgphoto2 --strip-components=1
 
-      - name: Build libgphoto2
+      - name: Build libgphoto2 (MacOS)
         if: ${{ runner.os == 'macOS' }}
         run: |
           brew install libexif ${{ matrix.dependencies }}
@@ -100,7 +92,7 @@ jobs:
             yum install -y libusbx-devel libexif-devel libjpeg-turbo-devel
             gd-devel libcurl-devel libxml2-devel libtool-ltdl-devel &&
             cd libgphoto2 &&
-            ./configure --prefix=local_install --disable-internal-docs
+            ./configure --prefix=$PWD/local_install --disable-internal-docs
             --enable-vusb &&
             make &&
             make install
