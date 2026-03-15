@@ -43,6 +43,7 @@ jobs:
       - name: Build libgphoto2 (MacOS)
         if: ${{ runner.os == 'macOS' }}
         run: |
+          xcode-select --install
           brew install libexif ${{ matrix.dependencies }}
           cd libgphoto2
           ./configure --prefix=$PWD/local_install --disable-internal-docs \
