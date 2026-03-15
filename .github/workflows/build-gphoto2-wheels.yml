@@ -8,21 +8,21 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: Linux-x64
-            runner: ubuntu-22.04
-            arch: x86_64
-          - build: Linux-arm64
-            runner: ubuntu-22.04-arm
-            arch: aarch64
+          # - build: Linux-x64
+          #   runner: ubuntu-22.04
+          #   arch: x86_64
+          # - build: Linux-arm64
+          #   runner: ubuntu-22.04-arm
+          #   arch: aarch64
           - build: MacOS-x64
             runner: macos-15-intel
-            target: 15.0
-            arch: x86_64
-          - build: MacOS-arm64
-            runner: macos-14
-            dependencies: libtool gd
             target: 14.0
-            arch: arm64
+            arch: x86_64
+          # - build: MacOS-arm64
+          #   runner: macos-14
+          #   dependencies: libtool gd
+          #   target: 14.0
+          #   arch: arm64
     env:
       GPHOTO_SRC: https://github.com/gphoto/libgphoto2/releases/download/v2.5.33/libgphoto2-2.5.33.tar.xz
       GPHOTO2_ROOT: libgphoto2/local_install
