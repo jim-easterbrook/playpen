@@ -8,11 +8,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: Linux-x64
-            runner: ubuntu-22.04
-            arch: x86_64
-            wget: wget
-            exiv2_build: build-linux-release
+          # - build: Linux-x64
+          #   runner: ubuntu-22.04
+          #   arch: x86_64
+          #   wget: wget
+          #   exiv2_build: build-linux-release
           # - build: Linux-arm64
           #   runner: ubuntu-22.04-arm
           #   arch: aarch64
@@ -30,11 +30,11 @@ jobs:
           #   arch: arm64
           #   wget: wget
           #   exiv2_build: build-base_mac
-          # - build: Windows-x64
-          #   runner: windows-2022
-          #   arch: AMD64
-          #   wget: c:/msys64/usr/bin/wget.exe
-          #   exiv2_build: build-win-release
+          - build: Windows-x64
+            runner: windows-2022
+            arch: AMD64
+            wget: c:/msys64/usr/bin/wget.exe
+            exiv2_build: build-win-release
     env:
       EXIV2_SRC: >
         https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.8.tar.gz
@@ -149,8 +149,7 @@ jobs:
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ENVIRONMENT_LINUX: >
             LD_LIBRARY_PATH=/project/libexiv2/${{ matrix.exiv2_build }}/install/lib64
-          CIBW_ENVIRONMENT_WINDOWS: >
-            PATH="libexiv2\\${{ matrix.exiv2_build }}\\install\\bin;$PATH"
+          CIBW_ENVIRONMENT_WINDOWS: PATH="$EXIV2_ROOT/bin;$PATH"
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
           CIBW_BUILD: "cp39*"
           CIBW_SKIP: "*musllinux*"
