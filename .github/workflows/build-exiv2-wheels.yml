@@ -45,6 +45,7 @@ jobs:
         -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
         -D EXIV2_ENABLE_NLS=ON
         -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
+      EXIV2_ROOT: libexiv2/${{ matrix.exiv2_build }}/install
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     defaults:
       run:
@@ -146,13 +147,11 @@ jobs:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
-          CIBW_ENVIRONMENT: >
-            EXIV2_ROOT=libexiv2/${{ matrix.exiv2_build }}/install
           CIBW_ENVIRONMENT_LINUX: >
             LD_LIBRARY_PATH=libexiv2/${{ matrix.exiv2_build }}/install/lib64
           CIBW_ENVIRONMENT_WINDOWS: >
             PATH="libexiv2\\${{ matrix.exiv2_build }}\\install\\bin;$PATH"
-          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
+          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
           CIBW_BUILD: "cp39*"
           CIBW_SKIP: "*musllinux*"
           # CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair --add-path ${{ matrix.exiv2_root }}/bin -w {dest_dir} -v {wheel}"
