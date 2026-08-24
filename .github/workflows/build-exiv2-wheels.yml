@@ -85,7 +85,7 @@ jobs:
           echo -e "24a25\n>         self.requires('libgettext/0.21')" |
           patch conanfile.py &&
           cmake --preset win-release $EXIV2_OPTIONS
-          -G "Visual Studio 17 2022" &&
+          -G "Visual Studio 17 2022" . &&
           cmake --build build-win-release --config Release &&
           cmake --install build-win-release --config Release &&
           cp build-win-release/bin/libcurl.dll build-win-release/install/bin
@@ -150,6 +150,7 @@ jobs:
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
           CIBW_BUILD: "cp39*"
           CIBW_SKIP: "*musllinux*"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair --add-path libexiv2/build-win-release/install/lib -w {dest_dir} -v {wheel}"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
