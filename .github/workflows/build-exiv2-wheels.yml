@@ -40,7 +40,6 @@ jobs:
         -D EXIV2_ENABLE_FILESYSTEM_ACCESS=ON
         -D EXIV2_ENABLE_NLS=ON
         -D EXIV2_TEAM_WARNINGS_AS_ERRORS=OFF
-      EXIV2_ROOT: libexiv2/build/install
       MACOSX_DEPLOYMENT_TARGET: ${{ matrix.target }}
     defaults:
       run:
@@ -85,21 +84,21 @@ jobs:
           cd libexiv2 &&
           echo -e "24a25\n>         self.requires('libgettext/0.21')" |
           patch conanfile.py &&
-          cmake --preset win-release -B build $EXIV2_OPTIONS
+          cmake --preset win-release $EXIV2_OPTIONS
           -G "Visual Studio 17 2022" &&
-          cmake --build build --config Release &&
-          cmake --install build --config Release &&
-          cp build/bin/libcurl.dll build/install/bin
+          cmake --build build-win-release --config Release &&
+          cmake --install build-win-release --config Release &&
+          cp build-win-release/bin/libcurl.dll build-win-release/install/bin
 
       - name: Build exiv2 (macOS)
         if: ${{ runner.os == 'macOS' }}
         run: >
           brew install inih &&
           cd libexiv2 &&
-          cmake --preset base_mac -B build $EXIV2_OPTIONS
+          cmake --preset base_mac $EXIV2_OPTIONS
           -D CMAKE_OSX_ARCHITECTURES=${{ matrix.arch }} &&
-          cmake --build build --config Release &&
-          cmake --install build --config Release
+          cmake --build build-base_mac --config Release &&
+          cmake --install build-base_mac --config Release
 
       # - name: Build wheels (Python 3.6 & 3.7)
       #   if: ${{ runner.os != 'macOS' }}
@@ -110,11 +109,11 @@ jobs:
       #     CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
       #     CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
       #     CIBW_ENVIRONMENT_LINUX: >
-      #       EXIV2_ROOT=libexiv2/build/install
+      #       EXIV2_ROOT=libexiv2/build-linux-release/install
       #     CIBW_ENVIRONMENT_MACOS: >
-      #       EXIV2_ROOT=libexiv2/build/install
+      #       EXIV2_ROOT=libexiv2/build-base_mac/install
       #     CIBW_ENVIRONMENT_WINDOWS: >
-      #       EXIV2_ROOT=libexiv2/build/install
+      #       EXIV2_ROOT=libexiv2/build-win-release/install
       #     CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
       #     CIBW_BUILD: "cp36* cp37*"
       #     CIBW_SKIP: "*musllinux*"
@@ -131,10 +130,10 @@ jobs:
       #       meson setup --prefix=/usr --buildtype=release .. &&
       #       ninja && ninja install &&
       #       cd ../../libexiv2 &&
-      #       cmake --preset linux-release -B build $EXIV2_OPTIONS
+      #       cmake --preset linux-release $EXIV2_OPTIONS
       #       -D CONAN_AUTO_INSTALL=OFF &&
-      #       cmake --build build --config Release &&
-      #       cmake --install build --config Release
+      #       cmake --build build-linux-release --config Release &&
+      #       cmake --install build-linux-release --config Release
 
       - name: Build wheels (Python 3.9+)
         uses: pypa/cibuildwheel@v4.2.0
@@ -142,10 +141,16 @@ jobs:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
-          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
+          CIBW_ENVIRONMENT_LINUX: >
+            EXIV2_ROOT=libexiv2/build-linux-release/install
+          CIBW_ENVIRONMENT_MACOS: >
+            EXIV2_ROOT=libexiv2/build-base_mac/install
+          CIBW_ENVIRONMENT_WINDOWS: >
+            EXIV2_ROOT=libexiv2/build-win-release/install
+          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
           CIBW_BUILD: "cp39*"
           CIBW_SKIP: "*musllinux*"
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair --add-path ${{ env.EXIV2_ROOT }}/bin -w {dest_dir} -v {wheel}"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair --add-path libexiv2/build-win-release/install/bin -w {dest_dir} -v {wheel}"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
@@ -158,10 +163,10 @@ jobs:
             meson setup --prefix=/usr --buildtype=release .. &&
             ninja && ninja install &&
             cd ../../libexiv2 &&
-            cmake --preset linux-release -B build $EXIV2_OPTIONS
+            cmake --preset linux-release $EXIV2_OPTIONS
             -D CONAN_AUTO_INSTALL=OFF &&
-            cmake --build build --config Release &&
-            cmake --install build --config Release
+            cmake --build build-linux-release --config Release &&
+            cmake --install build-linux-release --config Release
 
       - name: Store results
         uses: actions/upload-artifact@v6
