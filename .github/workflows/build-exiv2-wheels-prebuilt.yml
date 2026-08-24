@@ -66,7 +66,7 @@ jobs:
           CIBW_BUILD: "cp39*"
           CIBW_SKIP: "*musllinux*"
           CIBW_BEFORE_ALL_MACOS: brew install inih
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair --add-path exiv2-${{ env.EXIV2_VSN }}-${{ matrix.exiv2_build }}/lib -w {dest_dir} -v {wheel}"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair --add-path exiv2-${{ env.EXIV2_VSN }}-${{ matrix.exiv2_build }}/bin -w {dest_dir} -v {wheel}"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
