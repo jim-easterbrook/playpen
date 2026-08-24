@@ -159,7 +159,6 @@ jobs:
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
           CIBW_BEFORE_ALL_LINUX: >
-            ls -l $LD_LIBRARY_PATH &&
             yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
             libcurl-devel brotli-devel meson &&
             localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
@@ -171,7 +170,8 @@ jobs:
             cmake --preset linux-release $EXIV2_OPTIONS
             -D CONAN_AUTO_INSTALL=OFF &&
             cmake --build ${{ matrix.exiv2_build }} --config Release &&
-            cmake --install ${{ matrix.exiv2_build }} --config Release
+            cmake --install ${{ matrix.exiv2_build }} --config Release &&
+            ls -l $LD_LIBRARY_PATH
 
       - name: Store results
         uses: actions/upload-artifact@v6
