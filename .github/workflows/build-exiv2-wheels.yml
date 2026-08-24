@@ -8,24 +8,24 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: Linux-x64
-            runner: ubuntu-22.04
-            arch: x86_64
-            wget: wget
-          - build: Linux-arm64
-            runner: ubuntu-22.04-arm
-            arch: aarch64
-            wget: wget
-          - build: MacOS-x64
-            runner: macos-15-intel
-            target: 14.0
-            arch: x86_64
-            wget: wget
-          - build: MacOS-arm64
-            runner: macos-14
-            target: 14.0
-            arch: arm64
-            wget: wget
+          # - build: Linux-x64
+          #   runner: ubuntu-22.04
+          #   arch: x86_64
+          #   wget: wget
+          # - build: Linux-arm64
+          #   runner: ubuntu-22.04-arm
+          #   arch: aarch64
+          #   wget: wget
+          # - build: MacOS-x64
+          #   runner: macos-15-intel
+          #   target: 14.0
+          #   arch: x86_64
+          #   wget: wget
+          # - build: MacOS-arm64
+          #   runner: macos-14
+          #   target: 14.0
+          #   arch: arm64
+          #   wget: wget
           - build: Windows-x64
             runner: windows-2022
             arch: AMD64
@@ -46,7 +46,7 @@ jobs:
         shell: bash
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: jim-easterbrook/python-exiv2
           ref: devel
@@ -100,43 +100,43 @@ jobs:
           cmake --build build-base_mac --config Release &&
           cmake --install build-base_mac --config Release
 
-      - name: Build wheels (Python 3.6 & 3.7)
-        if: ${{ runner.os != 'macOS' }}
-        # cibuildwheel@v3.x omits Python 3.6 & 3.7
-        uses: pypa/cibuildwheel@v2.23.3
-        env:
-          CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
-          CIBW_ENVIRONMENT_LINUX: >
-            EXIV2_ROOT=libexiv2/build-linux-release/install
-          CIBW_ENVIRONMENT_MACOS: >
-            EXIV2_ROOT=libexiv2/build-base_mac/install
-          CIBW_ENVIRONMENT_WINDOWS: >
-            EXIV2_ROOT=libexiv2/build-win-release/install
-          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
-          CIBW_BUILD: "cp36* cp37*"
-          CIBW_SKIP: "*musllinux*"
-          CIBW_TEST_COMMAND: >
-            python -m exiv2 -v &&
-            python -m unittest discover {project}/tests -v
-          CIBW_TEST_SKIP: cp36-macosx_x86_64 cp37-macosx_x86_64
-          CIBW_BEFORE_ALL_LINUX: >
-            yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
-            libcurl-devel brotli-devel meson &&
-            localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
-            pip install ninja &&
-            cd inih && mkdir build && cd build &&
-            meson setup --prefix=/usr --buildtype=release .. &&
-            ninja && ninja install &&
-            cd ../../libexiv2 &&
-            cmake --preset linux-release $EXIV2_OPTIONS
-            -D CONAN_AUTO_INSTALL=OFF &&
-            cmake --build build-linux-release --config Release &&
-            cmake --install build-linux-release --config Release
+      # - name: Build wheels (Python 3.6 & 3.7)
+      #   if: ${{ runner.os != 'macOS' }}
+      #   # cibuildwheel@v3.x omits Python 3.6 & 3.7
+      #   uses: pypa/cibuildwheel@v2.23.3
+      #   env:
+      #     CIBW_ARCHS: ${{ matrix.arch }}
+      #     CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+      #     CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
+      #     CIBW_ENVIRONMENT_LINUX: >
+      #       EXIV2_ROOT=libexiv2/build-linux-release/install
+      #     CIBW_ENVIRONMENT_MACOS: >
+      #       EXIV2_ROOT=libexiv2/build-base_mac/install
+      #     CIBW_ENVIRONMENT_WINDOWS: >
+      #       EXIV2_ROOT=libexiv2/build-win-release/install
+      #     CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
+      #     CIBW_BUILD: "cp36* cp37*"
+      #     CIBW_SKIP: "*musllinux*"
+      #     CIBW_TEST_COMMAND: >
+      #       python -m exiv2 -v &&
+      #       python -m unittest discover {project}/tests -v
+      #     CIBW_TEST_SKIP: cp36-macosx_x86_64 cp37-macosx_x86_64
+      #     CIBW_BEFORE_ALL_LINUX: >
+      #       yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
+      #       libcurl-devel brotli-devel meson &&
+      #       localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
+      #       pip install ninja &&
+      #       cd inih && mkdir build && cd build &&
+      #       meson setup --prefix=/usr --buildtype=release .. &&
+      #       ninja && ninja install &&
+      #       cd ../../libexiv2 &&
+      #       cmake --preset linux-release $EXIV2_OPTIONS
+      #       -D CONAN_AUTO_INSTALL=OFF &&
+      #       cmake --build build-linux-release --config Release &&
+      #       cmake --install build-linux-release --config Release
 
-      - name: Build wheels (Python 3.8+)
-        uses: pypa/cibuildwheel@v3.2.1
+      - name: Build wheels (Python 3.9+)
+        uses: pypa/cibuildwheel@v4.2.0
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
@@ -148,7 +148,7 @@ jobs:
           CIBW_ENVIRONMENT_WINDOWS: >
             EXIV2_ROOT=libexiv2/build-win-release/install
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
-          CIBW_BUILD: "cp*"
+          CIBW_BUILD: "cp39*"
           CIBW_SKIP: "*musllinux*"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
@@ -168,7 +168,7 @@ jobs:
             cmake --install build-linux-release --config Release
 
       - name: Store results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: exiv2-wheels-${{ matrix.build }}
           path: wheelhouse/*.whl
