@@ -30,11 +30,11 @@ jobs:
           #   arch: arm64
           #   wget: wget
           #   exiv2_root: libexiv2/build-base_mac/install
-          - build: Windows-x64
-            runner: windows-2022
-            arch: AMD64
-            wget: c:/msys64/usr/bin/wget.exe
-            exiv2_root: libexiv2/build-win-release/install
+          # - build: Windows-x64
+          #   runner: windows-2022
+          #   arch: AMD64
+          #   wget: c:/msys64/usr/bin/wget.exe
+          #   exiv2_root: libexiv2/build-win-release/install
     env:
       EXIV2_SRC: >
         https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.8.tar.gz
@@ -147,6 +147,8 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ENVIRONMENT: EXIV2_ROOT=${{ matrix.exiv2_root }}
+          CIBW_ENVIRONMENT_LINUX: >
+            LD_LIBRARY_PATH=${{ matrix.exiv2_root }}/lib64
           CIBW_ENVIRONMENT_WINDOWS: >
             PATH="${{ matrix.exiv2_root }}\\bin;$PATH"
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS
