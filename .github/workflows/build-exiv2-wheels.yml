@@ -148,7 +148,7 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ENVIRONMENT_LINUX: >
-            LD_LIBRARY_PATH={project}/libexiv2/${{ matrix.exiv2_build }}/install/lib64
+            LD_LIBRARY_PATH=/project/libexiv2/${{ matrix.exiv2_build }}/install/lib64
           CIBW_ENVIRONMENT_WINDOWS: >
             PATH="libexiv2\\${{ matrix.exiv2_build }}\\install\\bin;$PATH"
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
