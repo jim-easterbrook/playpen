@@ -118,7 +118,7 @@ jobs:
             AUDITWHEEL_PLAT=manylinux_2_27_${{ matrix.arch }}
           CIBW_ENVIRONMENT_WINDOWS: PATH="$EXIV2_ROOT/bin;$PATH"
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
-          CIBW_BUILD: "cp38*"
+          CIBW_BUILD: "cp37* cp38*"
           CIBW_SKIP: "*musllinux*"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
             delvewheel repair -w {dest_dir} -v {wheel}
@@ -141,34 +141,34 @@ jobs:
             cmake --install build-linux-release --config Release
           CIBW_BEFORE_ALL_WINDOWS: pip install delvewheel
 
-      - name: Build wheels (Python 3.9+)
-        uses: pypa/cibuildwheel@v4.2.0
-        env:
-          CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
-          CIBW_ENVIRONMENT_LINUX: >
-            AUDITWHEEL_PLAT=manylinux_2_27_${{ matrix.arch }}
-          CIBW_ENVIRONMENT_WINDOWS: PATH="$EXIV2_ROOT/bin;$PATH"
-          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
-          CIBW_BUILD: "cp39*"
-          CIBW_SKIP: "*musllinux*"
-          CIBW_TEST_COMMAND: >
-            python -m exiv2 -v &&
-            python -m unittest discover {project}/tests -v
-          CIBW_BEFORE_ALL_LINUX: >
-            yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
-            libcurl-devel brotli-devel meson &&
-            localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
-            pip install ninja &&
-            cd inih && mkdir build && cd build &&
-            meson setup --prefix=/usr --buildtype=release .. &&
-            ninja && ninja install &&
-            cd ../../libexiv2 &&
-            cmake --preset linux-release $EXIV2_OPTIONS
-            -D CONAN_AUTO_INSTALL=OFF &&
-            cmake --build ${{ matrix.exiv2_build }} --config Release &&
-            cmake --install ${{ matrix.exiv2_build }} --config Release
+      # - name: Build wheels (Python 3.9+)
+      #   uses: pypa/cibuildwheel@v4.2.0
+      #   env:
+      #     CIBW_ARCHS: ${{ matrix.arch }}
+      #     CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+      #     CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
+      #     CIBW_ENVIRONMENT_LINUX: >
+      #       AUDITWHEEL_PLAT=manylinux_2_27_${{ matrix.arch }}
+      #     CIBW_ENVIRONMENT_WINDOWS: PATH="$EXIV2_ROOT/bin;$PATH"
+      #     CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
+      #     CIBW_BUILD: "cp39*"
+      #     CIBW_SKIP: "*musllinux*"
+      #     CIBW_TEST_COMMAND: >
+      #       python -m exiv2 -v &&
+      #       python -m unittest discover {project}/tests -v
+      #     CIBW_BEFORE_ALL_LINUX: >
+      #       yum install -y --nogpgcheck zlib-devel expat-devel gettext-devel
+      #       libcurl-devel brotli-devel meson &&
+      #       localedef -c -i de_DE -f UTF-8 de_DE.UTF-8 &&
+      #       pip install ninja &&
+      #       cd inih && mkdir build && cd build &&
+      #       meson setup --prefix=/usr --buildtype=release .. &&
+      #       ninja && ninja install &&
+      #       cd ../../libexiv2 &&
+      #       cmake --preset linux-release $EXIV2_OPTIONS
+      #       -D CONAN_AUTO_INSTALL=OFF &&
+      #       cmake --build ${{ matrix.exiv2_build }} --config Release &&
+      #       cmake --install ${{ matrix.exiv2_build }} --config Release
 
       - name: Store results
         uses: actions/upload-artifact@v6
