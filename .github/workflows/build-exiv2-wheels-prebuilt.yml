@@ -8,24 +8,24 @@ jobs:
     strategy:
       matrix:
         include:
-          # - build: Linux-x64
-          #   runner: ubuntu-22.04
-          #   exiv2_build: Linux-x86_64
-          #   arch: x86_64
-          # - build: Linux-arm64
-          #   runner: ubuntu-22.04-arm
-          #   exiv2_build: Linux-aarch64
-          #   arch: aarch64
-          # - build: MacOS-x64
-          #   runner: macos-15-intel
-          #   exiv2_build: Darwin-x86_64
-          #   target: 15.0
-          #   arch: x86_64
-          # - build: MacOS-arm64
-          #   runner: macos-14
-          #   exiv2_build: Darwin-arm64
-          #   target: 14.0
-          #   arch: arm64
+          - build: Linux-x64
+            runner: ubuntu-22.04
+            exiv2_build: Linux-x86_64
+            arch: x86_64
+          - build: Linux-arm64
+            runner: ubuntu-22.04-arm
+            exiv2_build: Linux-aarch64
+            arch: aarch64
+          - build: MacOS-x64
+            runner: macos-15-intel
+            exiv2_build: Darwin-x86_64
+            target: 15.0
+            arch: x86_64
+          - build: MacOS-arm64
+            runner: macos-14
+            exiv2_build: Darwin-arm64
+            target: 14.0
+            arch: arm64
           - build: Windows-x64
             runner: windows-2022
             exiv2_build: 2022msvc-AMD64
@@ -35,6 +35,7 @@ jobs:
         shell: bash
     env:
       EXIV2_VSN: 0.28.8
+      EXIV2_ROOT: exiv2-${{ env.EXIV2_VSN }}-${{ matrix.exiv2_build }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
@@ -45,28 +46,26 @@ jobs:
       - name: Download exiv2.tar.gz
         if: ${{ runner.os != 'Windows' }}
         run: |
-          wget -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.EXIV2_VSN }}/exiv2-${{ env.EXIV2_VSN }}-${{ matrix.exiv2_build }}.tar.gz -O - |
+          wget -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.EXIV2_VSN }}/${{ env.EXIV2_ROOT }}.tar.gz -O - |
           tar zxf -
 
       - name: Download exiv2.zip
         if: ${{ runner.os == 'Windows' }}
         run: |
-          c:/msys64/usr/bin/wget.exe -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.EXIV2_VSN }}/exiv2-${{ env.EXIV2_VSN }}-${{ matrix.exiv2_build }}.zip -O exiv2.zip
+          c:/msys64/usr/bin/wget.exe -nv https://github.com/Exiv2/exiv2/releases/download/v${{ env.EXIV2_VSN }}/${{ env.EXIV2_ROOT }}.zip -O exiv2.zip
           unzip exiv2.zip
 
       - name: Build wheels
-        # cibuildwheel@v4.x omits Python < 3.9
+        # cibuildwheel@v4.x does Python 3.9+
         uses: pypa/cibuildwheel@v4.2.0
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_ENVIRONMENT: >
-            EXIV2_ROOT=exiv2-${{ env.EXIV2_VSN }}-${{ matrix.exiv2_build }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_34
-          CIBW_BUILD: "cp39*"
+          CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_ROOT
+          CIBW_BUILD: "cp*"
           CIBW_SKIP: "*musllinux*"
           CIBW_BEFORE_ALL_MACOS: brew install inih
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair --add-path exiv2-${{ env.EXIV2_VSN }}-${{ matrix.exiv2_build }}/bin -w {dest_dir} -v {wheel}"
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
