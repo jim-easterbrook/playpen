@@ -86,7 +86,7 @@ jobs:
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
         run: >
-          vcpkg install zlib &&
+          vcpkg install zlib brotli &&
           cd libexiv2 &&
           cmake --preset win-release $EXIV2_OPTIONS -D CONAN_AUTO_INSTALL=OFF
           -D CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
