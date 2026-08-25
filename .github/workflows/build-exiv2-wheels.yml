@@ -8,16 +8,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: Linux-x64
-            runner: ubuntu-22.04
-            arch: x86_64
-            wget: wget
-            exiv2_build: build-linux-release
-          - build: Linux-arm64
-            runner: ubuntu-22.04-arm
-            arch: aarch64
-            wget: wget
-            exiv2_build: build-linux-release
+          # - build: Linux-x64
+          #   runner: ubuntu-22.04
+          #   arch: x86_64
+          #   wget: wget
+          #   exiv2_build: build-linux-release
+          # - build: Linux-arm64
+          #   runner: ubuntu-22.04-arm
+          #   arch: aarch64
+          #   wget: wget
+          #   exiv2_build: build-linux-release
           - build: MacOS-x64
             runner: macos-15-intel
             target: 14.0
@@ -30,11 +30,11 @@ jobs:
             arch: arm64
             wget: wget
             exiv2_build: build-base_mac
-          - build: Windows-x64
-            runner: windows-2022
-            arch: AMD64
-            wget: c:/msys64/usr/bin/wget.exe
-            exiv2_build: build-win-release
+          # - build: Windows-x64
+          #   runner: windows-2022
+          #   arch: AMD64
+          #   wget: c:/msys64/usr/bin/wget.exe
+          #   exiv2_build: build-win-release
     env:
       EXIV2_SRC: >
         https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.8.tar.gz
@@ -107,7 +107,7 @@ jobs:
           cmake --install build-base_mac --config Release
 
       - name: Build wheels (Python 3.6 - 3.8)
-        if: ${{ runner.os != 'macOS' }}
+        # if: ${{ runner.os != 'macOS' }}
         # cibuildwheel@v4.x does Python 3.9+
         uses: pypa/cibuildwheel@v2.23.3
         env:
@@ -116,10 +116,9 @@ jobs:
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ENVIRONMENT_LINUX: >
             AUDITWHEEL_PLAT=manylinux_2_27_${{ matrix.arch }}
-            # LD_LIBRARY_PATH=/project/$EXIV2_ROOT/lib64
           CIBW_ENVIRONMENT_WINDOWS: PATH="$EXIV2_ROOT/bin;$PATH"
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
-          CIBW_BUILD: "cp36*"
+          CIBW_BUILD: "cp38*"
           CIBW_SKIP: "*musllinux*"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: >
             delvewheel repair -w {dest_dir} -v {wheel}
@@ -150,13 +149,10 @@ jobs:
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           CIBW_ENVIRONMENT_LINUX: >
             AUDITWHEEL_PLAT=manylinux_2_27_${{ matrix.arch }}
-            # LD_LIBRARY_PATH=/project/$EXIV2_ROOT/lib64
           CIBW_ENVIRONMENT_WINDOWS: PATH="$EXIV2_ROOT/bin;$PATH"
           CIBW_ENVIRONMENT_PASS_LINUX: EXIV2_OPTIONS EXIV2_ROOT
           CIBW_BUILD: "cp39*"
           CIBW_SKIP: "*musllinux*"
-          # CIBW_REPAIR_WHEEL_COMMAND_MACOS: >
-          #   DYLD_LIBRARY_PATH=/project/$EXIV2_ROOT/lib delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}
           CIBW_TEST_COMMAND: >
             python -m exiv2 -v &&
             python -m unittest discover {project}/tests -v
