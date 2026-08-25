@@ -139,6 +139,7 @@ jobs:
             -D CONAN_AUTO_INSTALL=OFF &&
             cmake --build build-linux-release --config Release &&
             cmake --install build-linux-release --config Release
+          CIBW_BEFORE_ALL_WINDOWS: pip install delvewheel
 
       - name: Build wheels (Python 3.9+)
         uses: pypa/cibuildwheel@v4.2.0
