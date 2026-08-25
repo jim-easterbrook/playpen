@@ -30,12 +30,12 @@ jobs:
             runner: windows-2022
             exiv2_build: 2022msvc-AMD64
             arch: AMD64
+    env:
+      EXIV2_VSN: 0.28.8
+      EXIV2_ROOT: exiv2-0.28.8-${{ matrix.exiv2_build }}
     defaults:
       run:
         shell: bash
-    env:
-      EXIV2_VSN: 0.28.8
-      EXIV2_ROOT: exiv2-${EXIV2_VSN}-${{ matrix.exiv2_build }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
