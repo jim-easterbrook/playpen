@@ -86,6 +86,7 @@ jobs:
       - name: Build exiv2 (Windows)
         if: ${{ runner.os == 'Windows' }}
         run: >
+          vcpkg install zlib &&
           cd libexiv2 &&
           cmake --preset win-release $EXIV2_OPTIONS -D CONAN_AUTO_INSTALL=OFF
           -G "Visual Studio 17 2022" &&
